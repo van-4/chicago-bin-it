@@ -2,203 +2,322 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Can I Bin It? Chicago Disposal & Recycling Directory</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Can I Bin It? Chicago — Waste & Recycling Lookup</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#020617">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+  <style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col selection:bg-sky-500 selection:text-white">
 
-  <!-- Lake Michigan Deep Gradient Header -->
-<header class="bg-gradient-to-b from-[#0b2545] via-[#134074] to-[#0b2545] text-white border-b-2 border-sky-300/40 py-9 px-4 text-center">
-  <div class="max-w-3xl mx-auto">
-    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 backdrop-blur-md text-sky-200 border border-white/20 mb-3 shadow-inner">
-      <span class="text-red-400 font-bold">✶</span>
-      <span>Chicago Resident Waste Finder</span>
-    </div>
-    
-    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight drop-shadow-sm">
-      Can I Bin It? <span class="text-sky-300">Chicago</span>
-    </h1>
-    <p class="mt-2 text-sky-100/80 text-xs sm:text-sm max-w-md mx-auto leading-relaxed">
-      Stop contamination fines. Check curbside eligibility and local drop-off depots instantly.
-    </p>
-    
-    <!-- Translucent Frosted Glass Search Bar -->
-    <div class="mt-6 relative max-w-xl mx-auto">
-      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-sky-200">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-        </svg>
+  <!-- ================= SEARCH VIEW ================= -->
+  <div id="searchView" class="flex-grow flex flex-col">
+    <!-- Header -->
+    <header class="bg-slate-950 text-white border-b-4 border-sky-400 py-8 px-4 text-center relative overflow-hidden">
+      <div class="absolute -right-6 -bottom-8 opacity-5 text-white pointer-events-none select-none text-9xl font-serif">✶</div>
+      <div class="max-w-3xl mx-auto relative z-10">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-sky-950/80 text-sky-300 border border-sky-500/30 mb-3 shadow-sm">
+          <span class="text-rose-500 font-bold">✶ ✶ ✶ ✶</span>
+          <span class="tracking-wide uppercase text-[10px]">City of Chicago Guidelines</span>
+        </div>
+        
+        <h1 class="text-3xl sm:text-4xl font-black tracking-tight text-white">
+          Can I Bin It? <span class="text-sky-400">Chicago</span>
+        </h1>
+        <p class="mt-2 text-slate-300 text-xs sm:text-sm max-w-md mx-auto leading-relaxed">
+          Tap any card for disposal details, accepted examples, and drop-off maps.
+        </p>
+        
+        <!-- Search Input -->
+        <div class="mt-6 relative max-w-xl mx-auto">
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-sky-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </div>
+          <input 
+            type="search" 
+            id="searchInput" 
+            placeholder="Search item (e.g. pizza box, paint, battery, tv)..."
+            class="w-full pl-11 pr-4 py-3.5 bg-slate-900 text-white rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-400 placeholder-slate-400 text-sm sm:text-base shadow-lg transition-all"
+            autocomplete="off"
+          >
+        </div>
+
+        <!-- Filter Badges -->
+        <div class="flex overflow-x-auto gap-1.5 mt-5 text-xs font-medium pb-1 justify-start sm:justify-center no-scrollbar" id="filterContainer">
+          <button data-filter="all" class="filter-btn active whitespace-nowrap px-3.5 py-1.5 rounded-lg bg-sky-500 text-white font-semibold transition-all">All Items</button>
+          <button data-filter="blue_cart" class="filter-btn whitespace-nowrap px-3.5 py-1.5 rounded-lg bg-slate-900 text-slate-300 border border-slate-800 hover:border-slate-700 transition-all">Blue Cart</button>
+          <button data-filter="retail_dropoff" class="filter-btn whitespace-nowrap px-3.5 py-1.5 rounded-lg bg-slate-900 text-slate-300 border border-slate-800 hover:border-slate-700 transition-all">Store Drop-off</button>
+          <button data-filter="special_facility" class="filter-btn whitespace-nowrap px-3.5 py-1.5 rounded-lg bg-slate-900 text-slate-300 border border-slate-800 hover:border-slate-700 transition-all">Goose Island</button>
+          <button data-filter="trash" class="filter-btn whitespace-nowrap px-3.5 py-1.5 rounded-lg bg-slate-900 text-slate-300 border border-slate-800 hover:border-slate-700 transition-all">Trash Only</button>
+        </div>
       </div>
-      <input 
-        type="search" 
-        id="searchInput" 
-        placeholder="Type an item (e.g. coffee cup, batteries, pizza box)..."
-        class="w-full pl-11 pr-4 py-3.5 bg-black/25 backdrop-blur-md text-white rounded-xl border border-white/20 focus:outline-none focus:ring-2 focus:ring-sky-300 focus:bg-black/40 placeholder-sky-200/60 text-sm sm:text-base shadow-xl transition-all"
-        autocomplete="off"
-      >
-    </div>
+    </header>
 
-    <!-- Filter Buttons -->
-    <div class="flex overflow-x-auto gap-1.5 mt-5 text-xs font-medium pb-1 justify-start sm:justify-center no-scrollbar" id="filterContainer">
-      <button data-filter="all" class="filter-btn active whitespace-nowrap px-3.5 py-1.5 rounded-lg bg-sky-400 text-slate-900 font-bold">All Items</button>
-      <button data-filter="blue_cart" class="filter-btn whitespace-nowrap px-3.5 py-1.5 rounded-lg bg-white/10 text-sky-100 hover:bg-white/20 border border-white/10">Blue Cart</button>
-      <button data-filter="retail_dropoff" class="filter-btn whitespace-nowrap px-3.5 py-1.5 rounded-lg bg-white/10 text-sky-100 hover:bg-white/20 border border-white/10">Retail Return</button>
-      <button data-filter="special_facility" class="filter-btn whitespace-nowrap px-3.5 py-1.5 rounded-lg bg-white/10 text-sky-100 hover:bg-white/20 border border-white/10">Goose Island</button>
-      <button data-filter="trash" class="filter-btn whitespace-nowrap px-3.5 py-1.5 rounded-lg bg-white/10 text-sky-100 hover:bg-white/20 border border-white/10">Trash Only</button>
-    </div>
+    <!-- Grid Container -->
+    <main class="flex-grow max-w-5xl w-full mx-auto px-4 py-6">
+      <div id="resultsCount" class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3"></div>
+      <div id="itemsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-3.5"></div>
+      <div id="noResults" class="hidden text-center py-16">
+        <p class="text-slate-500 text-base font-semibold">No items match that search.</p>
+        <p class="text-slate-400 text-xs mt-1">Try broad terms like "oil", "paint", or "battery".</p>
+      </div>
+    </main>
   </div>
-</header>
 
-  <main class="flex-grow max-w-5xl w-full mx-auto px-4 py-8">
-    <div id="resultsCount" class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4"></div>
-    <div id="itemsGrid" class="max-w-2xl mx-auto space-y-3"></div>
-    <div id="noResults" class="hidden text-center py-16">
-      <p class="text-slate-500 text-base">No disposal rules found matching that item.</p>
-      <p class="text-slate-400 text-xs mt-1">Try broad terms like "paint", "paper", or "plastic".</p>
-    </div>
-  </main>
-
-  <footer class="bg-white border-t border-slate-200 py-6 px-4 text-xs text-slate-500">
-    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between gap-4">
-      <div>
-        <span class="font-bold text-slate-700">Chicago HCCRF (Goose Island Depot):</span> 1150 N North Branch St.<br>
-        Tuesdays 7am–Noon | Thursdays 2pm–7pm | First Saturday of each month 8am–3pm.
+  <!-- ================= DETAIL VIEW (Opens on Card Click) ================= -->
+  <div id="detailView" class="hidden flex-grow flex flex-col bg-slate-100 min-h-screen">
+    <!-- Top Sticky Bar -->
+    <div class="bg-slate-900 text-white border-b border-slate-800 py-3.5 px-4 sticky top-0 z-30 shadow-md">
+      <div class="max-w-3xl mx-auto flex items-center justify-between">
+        <button id="backBtn" class="flex items-center gap-1.5 text-xs font-semibold text-sky-400 hover:text-sky-300 active:scale-95 transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
+          Back to Directory
+        </button>
+        <span id="detailBadge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full border"></span>
       </div>
-      <div class="sm:text-right">
-        Chicago Blue Cart rules apply to residential properties with 1–4 units.
+    </div>
+
+    <!-- Detail Content Container -->
+    <main class="flex-grow max-w-3xl w-full mx-auto px-4 py-6 space-y-5">
+      <!-- Title Card -->
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+        <span id="detailCategory" class="text-xs font-bold uppercase tracking-wider text-sky-600 block mb-1"></span>
+        <h2 id="detailTitle" class="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight"></h2>
+        <p id="detailSummary" class="mt-2 text-sm text-slate-600 leading-relaxed"></p>
+
+        <!-- Official Instruction Banner -->
+        <div class="mt-5 p-4 rounded-xl bg-slate-50 border border-slate-200/80">
+          <div class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-1 flex items-center gap-1">
+            <span class="text-sky-500">▶</span> Required Action
+          </div>
+          <p id="detailInstructions" class="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium"></p>
+        </div>
+      </div>
+
+      <!-- Specific Examples Card -->
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-3">Common Examples & Synonyms</h3>
+        <div id="detailExamples" class="flex flex-wrap gap-2"></div>
+      </div>
+
+      <!-- Drop-Off Location & Maps Embed -->
+      <div id="detailLocationCard" class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Designated Drop-Off Location</h3>
+            <p id="detailLocName" class="text-base font-extrabold text-slate-800 mt-0.5"></p>
+          </div>
+          <span id="detailLocType" class="text-[11px] font-semibold bg-slate-100 text-slate-600 px-2 py-0.5 rounded border border-slate-200"></span>
+        </div>
+
+        <p id="detailLocAddress" class="text-xs text-slate-600"></p>
+        <p id="detailLocNotes" class="text-xs text-amber-800 bg-amber-50 p-2.5 rounded-lg border border-amber-200/60"></p>
+
+        <!-- Google Maps Square Embed -->
+        <div class="relative w-full aspect-square sm:aspect-video rounded-xl overflow-hidden border border-slate-200 shadow-inner mt-3">
+          <iframe 
+            id="detailMapIframe" 
+            class="w-full h-full border-0" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade"
+            src=""
+          ></iframe>
+        </div>
+        <a id="detailDirectionsLink" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all text-center">
+          Open Full Directions in Google Maps ↗
+        </a>
+      </div>
+
+      <!-- Bulk Hauling Partner Box (Tier 1 Monetization Hook) -->
+      <div id="detailHaulPartner" class="hidden bg-sky-950 text-white rounded-2xl p-6 border border-sky-800 shadow-md">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-sky-400 bg-sky-900/60 px-2 py-0.5 rounded">Heavy or Restricted Item?</span>
+            <h4 class="text-lg font-bold mt-1 text-white">Can't haul this to Goose Island yourself?</h4>
+            <p class="text-xs text-slate-300 mt-1 leading-relaxed">Book a certified local Chicago hauler to carry this out of your home or alley today.</p>
+          </div>
+        </div>
+        <a href="https://goloadup.com/" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center justify-center w-full py-3 bg-sky-500 hover:bg-sky-400 text-slate-950 rounded-xl text-xs font-black tracking-wide transition-all shadow-md">
+          Check Instant Upfront Pricing ➔
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <!-- Global Footer -->
+  <footer class="bg-white border-t border-slate-200 py-6 px-4 text-xs text-slate-500 mt-auto">
+    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3 text-center sm:text-left">
+      <div>
+        <span class="font-bold text-slate-700">Can I Bin It? Chicago</span> — Independent Resident Disposal Guide
+      </div>
+      <div>
+        <a href="/privacy.html" class="hover:text-slate-800 underline">Privacy Policy & Affiliate Disclosure</a>
       </div>
     </div>
   </footer>
 
+  <!-- ================= APP SCRIPT ================= -->
   <script>
     const database = [
       {
         id: "rechargeable-batteries",
-        name: "Lithium-Ion / Rechargeable Batteries",
-        aliases: ["laptop battery", "drill battery", "vape battery", "cell phone battery", "li-ion"],
+        name: "Lithium-Ion & Rechargeable Batteries",
+        aliases: ["laptop battery", "drill battery", "vape battery", "cell phone battery", "li-ion", "scooter battery", "power tool pack"],
         category: "Hazardous & Electronics",
         disposalAction: "retail_dropoff",
         badge: "Drop-Off Required",
         blueCartAllowed: false,
-        summary: "Never place in Blue or Black carts; batteries spark fires in collection trucks and sorting facilities.",
-        instructions: "Tape terminals with electrical tape. Drop off at collection bins in big-box stores or Goose Island.",
-        locations: [
-          { name: "The Home Depot (Call2Recycle Bin)", type: "Retail", notes: "Bin located near customer entrance.", address: "Citywide retail locations" },
-          { name: "Chicago HCCRF (Goose Island)", type: "Municipal", address: "1150 N North Branch St", notes: "Tues 7am-12pm, Thurs 2pm-7pm, 1st Sat 8am-3pm" }
-        ]
+        summary: "Never put lithium batteries in your Blue Cart or garbage dumpster. They easily crush during transit, sparking intense truck and facility fires.",
+        instructions: "Cover all exposed metal contacts/terminals with standard clear tape or electrical tape before drop-off to eliminate spark risk.",
+        partnerEligible: false,
+        location: {
+          name: "The Home Depot (Call2Recycle Bins)",
+          type: "Retail Partner",
+          address: "1232 W North Ave, Chicago, IL 60642",
+          notes: "Collection box usually located right inside the entrance vestibule near customer returns.",
+          mapQuery: "Home+Depot+1232+W+North+Ave+Chicago+IL"
+        }
       },
       {
         id: "alkaline-batteries",
-        name: "Alkaline Batteries (Single-Use AA, AAA, 9V)",
-        aliases: ["double a", "triple a", "duracell", "energizer", "standard batteries"],
+        name: "Single-Use Alkaline Batteries (AA, AAA, 9V)",
+        aliases: ["double a", "triple a", "duracell", "energizer", "d battery", "remote batteries"],
         category: "Household Items",
         disposalAction: "trash",
         badge: "Black Cart / Trash",
         blueCartAllowed: false,
-        summary: "Standard single-use alkaline batteries are non-hazardous in Illinois and go in normal trash.",
-        instructions: "Toss in regular household trash. City drop-off facilities do not accept single-use alkaline batteries.",
-        locations: []
-      },
-      {
-        id: "latex-paint",
-        name: "Latex / Water-Based Paint",
-        aliases: ["wall paint", "acrylic paint", "water-based paint"],
-        category: "Chemicals & Paint",
-        disposalAction: "trash",
-        badge: "Dry & Trash",
-        blueCartAllowed: false,
-        summary: "Latex paint is water-based and non-hazardous; it is NOT accepted at Goose Island.",
-        instructions: "Must be completely dried out first. Mix in kitty litter or paint hardener. Leave lid off and place in Black Cart.",
-        locations: []
+        summary: "Standard single-use alkaline batteries manufactured after 1996 contain no added mercury and are classified as non-hazardous waste in Illinois.",
+        instructions: "Place inside your standard black garbage cart or alley dumpster. City drop-off depots do not collect single-use alkalines.",
+        partnerEligible: false,
+        location: null
       },
       {
         id: "oil-based-paint",
-        name: "Oil-Based Paint, Stains & Solvents",
-        aliases: ["wood stain", "paint thinner", "varnish", "mineral spirits"],
+        name: "Oil-Based Paint, Wood Stains & Solvents",
+        aliases: ["wood stain", "paint thinner", "varnish", "mineral spirits", "turpentine", "lacquer"],
         category: "Chemicals & Paint",
         disposalAction: "special_facility",
         badge: "Goose Island Only",
         blueCartAllowed: false,
-        summary: "Hazardous chemical waste. Flammable and prohibited from landfills and sewers.",
-        instructions: "Keep inside original labeled containers and transport to Goose Island during drop-off hours.",
-        locations: [
-          { name: "Chicago HCCRF (Goose Island)", type: "Municipal", address: "1150 N North Branch St", notes: "Tues 7am-12pm, Thurs 2pm-7pm, 1st Sat 8am-3pm" }
-        ]
+        summary: "Highly toxic and flammable. Prohibited from both city recycling carts, regular trash dumpsters, and city sewer drains.",
+        instructions: "Must be kept in original, leak-proof containers with readable labels. Transport upright to the city hazardous depot.",
+        partnerEligible: true,
+        location: {
+          name: "Chicago HCCRF (Goose Island)",
+          type: "City Hazardous Depot",
+          address: "1150 N North Branch St, Chicago, IL 60642",
+          notes: "Open Tuesdays 7am–12pm, Thursdays 2pm–7pm, and the 1st Saturday of every month 8am–3pm.",
+          mapQuery: "1150+N+North+Branch+St+Chicago+IL"
+        }
+      },
+      {
+        id: "latex-paint",
+        name: "Latex & Water-Based Wall Paint",
+        aliases: ["wall paint", "acrylic paint", "water-based paint", "ceiling paint"],
+        category: "Chemicals & Paint",
+        disposalAction: "trash",
+        badge: "Dry & Trash",
+        blueCartAllowed: false,
+        summary: "Latex paint is water-based and not hazardous. Because of this, it is strictly REJECTED at Goose Island.",
+        instructions: "Must be fully dried to a solid block before disposal. Mix with equal parts kitty litter or paint hardener. Leave lid off and place inside the regular black trash cart.",
+        partnerEligible: false,
+        location: null
       },
       {
         id: "plastic-grocery-bags",
-        name: "Plastic Shopping Bags & Film",
-        aliases: ["jewel bag", "target bag", "bubble wrap", "bread bag", "shrink wrap"],
+        name: "Plastic Grocery Bags & Plastic Film",
+        aliases: ["jewel bag", "target bag", "bubble wrap", "bread bag", "shrink wrap", "case wrap", "ziploc"],
         category: "Plastics",
         disposalAction: "retail_dropoff",
         badge: "Store Return Only",
         blueCartAllowed: false,
-        summary: "The #1 recycling contaminant in Chicago. They wrap around sorting machine gears.",
-        instructions: "Never put plastic bags in Blue Carts. Drop clean plastic film into bins at store entrances.",
-        locations: [
-          { name: "Jewel-Osco / Mariano's", type: "Retail", address: "Citywide locations", notes: "Collection bins located in front vestibules." }
-        ]
+        summary: "The #1 recycling contamination cause in Chicago. Loose film wraps around rotating sorting gears at recovery plants, shutting down lines.",
+        instructions: "Never bag your recyclables. Bring clean, dry grocery bags and shrink wrap back to collection bins at local grocery stores.",
+        partnerEligible: false,
+        location: {
+          name: "Jewel-Osco (Front Vestibule)",
+          type: "Retail Return",
+          address: "Citywide Grocery Locations (e.g. 1341 N Paulina St)",
+          notes: "Place bags loosely into the blue plastic film recycling bin located between the double doors.",
+          mapQuery: "Jewel+Osco+Chicago+IL"
+        }
+      },
+      {
+        id: "electronics-tvs",
+        name: "Televisions, Monitors & Large Electronics",
+        aliases: ["crt tv", "flat screen", "computer monitor", "printer", "old pc", "stereo", "microwave"],
+        category: "Hazardous & Electronics",
+        disposalAction: "special_facility",
+        badge: "Goose Island / Hauler",
+        blueCartAllowed: false,
+        summary: "Under the Illinois Electronic Products Recycling Act, it is illegal to landfill televisions and computer monitors.",
+        instructions: "Drop off during public hours at Goose Island or schedule a bulk electronics haul if unable to transport.",
+        partnerEligible: true,
+        location: {
+          name: "Chicago HCCRF (Goose Island)",
+          type: "City Hazardous Depot",
+          address: "1150 N North Branch St, Chicago, IL 60642",
+          notes: "Open Tuesdays 7am–12pm, Thursdays 2pm–7pm, and 1st Saturday of each month 8am–3pm.",
+          mapQuery: "1150+N+North+Branch+St+Chicago+IL"
+        }
       },
       {
         id: "pizza-box",
-        name: "Cardboard Pizza Box",
-        aliases: ["takeout box", "pizza carton"],
+        name: "Cardboard Delivery Pizza Boxes",
+        aliases: ["takeout box", "pizza carton", "lou malnati box", "pequods box"],
         category: "Paper & Cardboard",
         disposalAction: "blue_cart",
         badge: "Tear & Split",
         blueCartAllowed: true,
-        summary: "Food oil compromises paper recycling batches.",
-        instructions: "Tear box in two: place the clean lid into the Blue Cart; throw the oil-stained bottom into the regular trash.",
-        locations: []
+        summary: "Cardboard is recyclable, but food grease and cheese oils permanently contaminate paper pulp batches.",
+        instructions: "Tear the box along the hinge: clean top lid goes into the Blue Cart; greasy bottom goes into normal trash or composting.",
+        partnerEligible: false,
+        location: null
       },
       {
         id: "rigid-plastics-1-5",
         name: "Rigid Plastics #1, #2, #4, #5",
-        aliases: ["yogurt tub", "detergent bottle", "milk jug", "soda bottle", "shampoo bottle"],
+        aliases: ["yogurt tub", "detergent bottle", "milk jug", "soda bottle", "shampoo bottle", "bleach jug"],
         category: "Plastics",
         disposalAction: "blue_cart",
         badge: "Blue Cart Safe",
         blueCartAllowed: true,
-        summary: "Standard curbside recyclable item.",
-        instructions: "Empty and rinse out food remnants. Keep plastic caps screwed on before placing in cart.",
-        locations: []
-      },
-      {
-        id: "styrofoam",
-        name: "Styrofoam / Polystyrene Foam (#6)",
-        aliases: ["packing peanuts", "takeout clamshell", "foam cooler", "egg carton foam"],
-        category: "Plastics",
-        disposalAction: "trash",
-        badge: "Black Cart / Trash",
-        blueCartAllowed: false,
-        summary: "Polystyrene foam (#6) is strictly prohibited from Chicago Blue Carts.",
-        instructions: "Place inside the standard black trash bin.",
-        locations: []
+        summary: "Fully accepted in Chicago curbside Blue Carts if empty, rinsed, and dry.",
+        instructions: "Rinse away remaining food or soap residue. Screw the plastic lids and caps back onto bottles so they don't fall through sorting screens.",
+        partnerEligible: false,
+        location: null
       }
     ];
 
+    // DOM Elements
+    const searchView = document.getElementById('searchView');
+    const detailView = document.getElementById('detailView');
     const searchInput = document.getElementById('searchInput');
     const itemsGrid = document.getElementById('itemsGrid');
     const resultsCount = document.getElementById('resultsCount');
     const noResults = document.getElementById('noResults');
     const filterButtons = document.querySelectorAll('.filter-btn');
+    const backBtn = document.getElementById('backBtn');
 
     let currentFilter = 'all';
 
     function getBadgeClasses(action) {
       switch (action) {
-        case 'blue_cart':
-          return 'bg-emerald-50 text-emerald-700 border-emerald-200';
-        case 'retail_dropoff':
-          return 'bg-amber-50 text-amber-700 border-amber-200';
-        case 'special_facility':
-          return 'bg-rose-50 text-rose-700 border-rose-200';
-        default:
-          return 'bg-slate-100 text-slate-700 border-slate-200';
+        case 'blue_cart': return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        case 'retail_dropoff': return 'bg-amber-50 text-amber-700 border-amber-200';
+        case 'special_facility': return 'bg-rose-50 text-rose-700 border-rose-200';
+        default: return 'bg-slate-100 text-slate-700 border-slate-200';
       }
     }
 
+    // Render list cards with clickable links
     function renderItems() {
       const query = searchInput.value.toLowerCase().trim();
 
@@ -222,56 +341,124 @@
       noResults.classList.add('hidden');
 
       filtered.forEach(item => {
-        const card = document.createElement('article');
-        card.className = "bg-white border border-slate-200 rounded-xl p-3.5 shadow-sm flex flex-col justify-between hover:border-slate-300 transition-colors";
-
-        let locationsHtml = '';
-        if (item.locations && item.locations.length > 0) {
-          locationsHtml = `
-            <div class="mt-4 pt-3 border-t border-slate-100 text-xs">
-              <span class="font-semibold text-slate-700 block mb-1">Recommended Drop-off:</span>
-              ${item.locations.map(loc => `
-                <div class="text-slate-600 mb-1">
-                  <span class="font-medium text-slate-800">${loc.name}</span> — ${loc.address}
-                  ${loc.notes ? `<div class="text-slate-400 italic">${loc.notes}</div>` : ''}
-                </div>
-              `).join('')}
-            </div>
-          `;
-        }
+        const card = document.createElement('a');
+        card.href = `#${item.id}`;
+        card.className = "bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md hover:border-sky-300 transition-all flex flex-col justify-between block group cursor-pointer";
 
         card.innerHTML = `
           <div>
-            <div class="flex items-start justify-between gap-2 mb-2">
-              <h2 class="font-bold text-slate-900 text-base leading-snug">${item.name}</h2>
-              <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full border whitespace-nowrap ${getBadgeClasses(item.disposalAction)}">
+            <div class="flex items-start justify-between gap-2 mb-1.5">
+              <h2 class="font-bold text-slate-900 text-base leading-snug group-hover:text-sky-600 transition-colors">${item.name}</h2>
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded-full border whitespace-nowrap ${getBadgeClasses(item.disposalAction)}">
                 ${item.badge}
               </span>
             </div>
-            <p class="text-xs text-slate-500 font-medium mb-3">${item.category}</p>
-            <p class="text-xs text-slate-600 mb-2 leading-relaxed">${item.summary}</p>
-            <div class="text-xs text-slate-800 bg-slate-50 p-2.5 rounded-lg border border-slate-100 leading-relaxed">
-              <span class="font-semibold">Action:</span> ${item.instructions}
-            </div>
+            <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">${item.category}</p>
+            <p class="text-xs text-slate-600 line-clamp-2 leading-relaxed">${item.summary}</p>
           </div>
-          ${locationsHtml}
+          <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs text-sky-600 font-semibold">
+            <span>View drop-off rules & map</span>
+            <span class="group-hover:translate-x-1 transition-transform">➔</span>
+          </div>
         `;
         itemsGrid.appendChild(card);
       });
     }
 
+    // Route Handler: Displays Search List vs Item Detail
+    function handleRouting() {
+      const hash = window.location.hash.replace('#', '').trim();
+
+      if (hash) {
+        const item = database.find(i => i.id === hash);
+        if (item) {
+          showDetail(item);
+          return;
+        }
+      }
+      showSearch();
+    }
+
+    function showSearch() {
+      detailView.classList.add('hidden');
+      searchView.classList.remove('hidden');
+      window.scrollTo(0, 0);
+    }
+
+    function showDetail(item) {
+      searchView.classList.add('hidden');
+      detailView.classList.remove('hidden');
+      window.scrollTo(0, 0);
+
+      // Populate text
+      document.getElementById('detailTitle').textContent = item.name;
+      document.getElementById('detailCategory').textContent = item.category;
+      document.getElementById('detailSummary').textContent = item.summary;
+      document.getElementById('detailInstructions').textContent = item.instructions;
+
+      const badgeEl = document.getElementById('detailBadge');
+      badgeEl.textContent = item.badge;
+      badgeEl.className = `text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${getBadgeClasses(item.disposalAction)}`;
+
+      // Render synonyms / examples
+      const examplesContainer = document.getElementById('detailExamples');
+      examplesContainer.innerHTML = item.aliases.map(alias => 
+        `<span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-medium border border-slate-200">
+          ${alias}
+        </span>`
+      ).join('');
+
+      // Location Card & Maps Embed
+      const locCard = document.getElementById('detailLocationCard');
+      if (item.location) {
+        locCard.classList.remove('hidden');
+        document.getElementById('detailLocName').textContent = item.location.name;
+        document.getElementById('detailLocType').textContent = item.location.type;
+        document.getElementById('detailLocAddress').textContent = item.location.address;
+        document.getElementById('detailLocNotes').textContent = item.location.notes;
+
+        // Square responsive iframe embed using place query
+        const embedUrl = `https://maps.google.com/maps?q=${item.location.mapQuery}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
+        document.getElementById('detailMapIframe').src = embedUrl;
+        document.getElementById('detailDirectionsLink').href = `https://www.google.com/maps/search/?api=1&query=${item.location.mapQuery}`;
+      } else {
+        locCard.classList.add('hidden');
+      }
+
+      // Monetization Partner Box Toggle
+      const haulPartner = document.getElementById('detailHaulPartner');
+      if (item.partnerEligible) {
+        haulPartner.classList.remove('hidden');
+      } else {
+        haulPartner.classList.add('hidden');
+      }
+    }
+
+    // Listeners
     searchInput.addEventListener('input', renderItems);
 
     filterButtons.forEach(btn => {
       btn.addEventListener('click', () => {
-        filterButtons.forEach(b => b.classList.remove('bg-sky-500', 'text-white', 'border-sky-500'));
-        btn.classList.add('bg-sky-500', 'text-white', 'border-sky-500');
+        filterButtons.forEach(b => {
+          b.classList.remove('bg-sky-500', 'text-white', 'font-semibold');
+          b.classList.add('bg-slate-900', 'text-slate-300');
+        });
+        btn.classList.add('bg-sky-500', 'text-white', 'font-semibold');
+        btn.classList.remove('bg-slate-900', 'text-slate-300');
         currentFilter = btn.dataset.filter;
         renderItems();
       });
     });
 
-    renderItems();
+    backBtn.addEventListener('click', () => {
+      window.location.hash = '';
+    });
+
+    window.addEventListener('hashchange', handleRouting);
+    window.addEventListener('DOMContentLoaded', () => {
+      renderItems();
+      handleRouting();
+    });
   </script>
 </body>
 </html>
