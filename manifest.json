@@ -1,0 +1,125 @@
+[
+  {
+    "id": "rechargeable-batteries",
+    "name": "Lithium-Ion / Rechargeable Batteries",
+    "aliases": ["laptop battery", "drill battery", "vape battery", "cell phone battery", "li-ion"],
+    "category": "Hazardous & Electronics",
+    "disposalAction": "retail_dropoff",
+    "badge": "Drop-Off Required",
+    "blueCartAllowed": false,
+    "summary": "Never put these in your Blue or Black cart; they spark landfill and truck fires.",
+    "instructions": "Tape the terminals with electrical or duct tape before dropping off.",
+    "locations": [
+      {
+        "name": "The Home Depot (Call2Recycle Bins)",
+        "type": "Retail",
+        "notes": "Collection box usually located near customer service or the entrance.",
+        "address": "Citywide retail locations"
+      },
+      {
+        "name": "City of Chicago Household Chemicals & Computer Recycling Facility (HCCRF)",
+        "type": "Municipal",
+        "address": "1150 N North Branch St, Chicago, IL 60642",
+        "notes": "Tues 7am-12pm, Thurs 2pm-7pm, 1st Sat of month 8am-3pm."
+      }
+    ]
+  },
+  {
+    "id": "alkaline-batteries",
+    "name": "Alkaline Batteries (Single-Use AA, AAA, 9V)",
+    "aliases": ["double a", "triple a", "duracell", "energizer", "standard batteries"],
+    "category": "Household Items",
+    "disposalAction": "trash",
+    "badge": "Black Cart / Trash",
+    "blueCartAllowed": false,
+    "summary": "Standard single-use alkaline batteries are non-hazardous in Illinois and go in normal trash.",
+    "instructions": "Place in your standard black cart/dumpster. City facilities do not recycle alkaline batteries.",
+    "locations": []
+  },
+  {
+    "id": "latex-paint",
+    "name": "Latex / Water-Based Paint",
+    "aliases": ["wall paint", "acrylic paint", "water-based paint"],
+    "category": "Chemicals & Paint",
+    "disposalAction": "trash_prepared",
+    "badge": "Dry & Trash",
+    "blueCartAllowed": false,
+    "summary": "Latex paint is non-hazardous and is NOT accepted at the Goose Island city facility.",
+    "instructions": "Must be dried completely before disposal. Add kitty litter or paint hardener. Leave lid off and place inside the Black Cart.",
+    "locations": []
+  },
+  {
+    "id": "oil-based-paint",
+    "name": "Oil-Based Paint, Stains & Solvents",
+    "aliases": ["wood stain", "paint thinner", "varnish", "mineral spirits"],
+    "category": "Chemicals & Paint",
+    "disposalAction": "special_facility",
+    "badge": "Goose Island Only",
+    "blueCartAllowed": false,
+    "summary": "Hazardous waste. Illegal to dump in curbside bins or down city drains.",
+    "instructions": "Keep in original labeled containers. Drive through drop-off at Goose Island.",
+    "locations": [
+      {
+        "name": "Chicago HCCRF (Goose Island)",
+        "type": "Municipal",
+        "address": "1150 N North Branch St, Chicago, IL 60642",
+        "notes": "Tues 7am-12pm, Thurs 2pm-7pm, 1st Sat of month 8am-3pm."
+      }
+    ]
+  },
+  {
+    "id": "plastic-grocery-bags",
+    "name": "Plastic Shopping Bags & Film",
+    "aliases": ["jewel bag", "target bag", "bubble wrap", "bread bag", "shrink wrap"],
+    "category": "Plastics",
+    "disposalAction": "retail_dropoff",
+    "badge": "Store Return Only",
+    "blueCartAllowed": false,
+    "summary": "Number 1 contaminant in Chicago recycling. They tangle sorting machinery at the processing plant.",
+    "instructions": "Do not bag your recyclables. Bring clean, dry bags back to collection bins at local grocery stores.",
+    "locations": [
+      {
+        "name": "Jewel-Osco / Mariano's Entrance Bins",
+        "type": "Retail",
+        "address": "Citywide grocery locations",
+        "notes": "Look for plastic film recycling bins in the vestibule."
+      }
+    ]
+  },
+  {
+    "id": "pizza-box",
+    "name": "Cardboard Pizza Box",
+    "aliases": ["takeout box", "pizza carton"],
+    "category": "Paper & Cardboard",
+    "disposalAction": "mixed",
+    "badge": "Tear & Split",
+    "blueCartAllowed": true,
+    "summary": "Grease and food oils ruin paper pulp batches during recycling.",
+    "instructions": "Tear the box in half: clean top lid goes in the Blue Cart; greasy bottom goes into trash or food scrap compost.",
+    "locations": []
+  },
+  {
+    "id": "rigid-plastics-1-5",
+    "name": "Plastics #1, #2, #3, #4, #5",
+    "aliases": ["yogurt tub", "detergent bottle", "milk jug", "soda bottle", "shampoo bottle"],
+    "category": "Plastics",
+    "disposalAction": "blue_cart",
+    "badge": "Blue Cart Safe",
+    "blueCartAllowed": true,
+    "summary": "Accepted in Chicago curbside Blue Carts if empty, clean, and dry.",
+    "instructions": "Rinse out food residue. Re-attach plastic lids/caps so they do not get lost in sorting screens.",
+    "locations": []
+  },
+  {
+    "id": "styrofoam",
+    "name": "Styrofoam / Polystyrene Foam (#6)",
+    "aliases": ["packing peanuts", "foam takeout container", "foam cooler", "egg carton foam"],
+    "category": "Plastics",
+    "disposalAction": "trash",
+    "badge": "Black Cart / Trash",
+    "blueCartAllowed": false,
+    "summary": "Not accepted in Chicago Blue Carts under any circumstance.",
+    "instructions": "Place in regular trash. For clean block foam, look for specialized seasonal ward drop-off events.",
+    "locations": []
+  }
+]

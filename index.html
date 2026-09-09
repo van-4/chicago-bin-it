@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Can I Bin It? Chicago Disposal & Recycling Directory</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <header class="bg-slate-900 text-white border-b border-slate-800 py-10 px-4 text-center">
+    <div class="max-w-3xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20 mb-3">
+        <span>✶ Chicago Waste & Recycling Directory ✶</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Can I Bin It? Chicago</h1>
+      <p class="mt-2 text-slate-400 text-sm sm:text-base">Instant disposal instructions, Blue Cart rules, and Goose Island drop-off guidelines.</p>
+      
+      <div class="mt-6 relative max-w-xl mx-auto">
+        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        </div>
+        <input 
+          type="text" 
+          id="searchInput" 
+          placeholder="Search an item (e.g., pizza box, lithium battery, latex paint)..."
+          class="w-full pl-11 pr-4 py-3.5 bg-slate-800/90 text-white rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent placeholder-slate-400 text-base shadow-inner"
+          autocomplete="off"
+        >
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-2 mt-4 text-xs font-medium" id="filterContainer">
+        <button data-filter="all" class="filter-btn active px-3 py-1.5 rounded-full bg-slate-800 text-slate-200 border border-slate-700 hover:bg-slate-700">All Items</button>
+        <button data-filter="blue_cart" class="filter-btn px-3 py-1.5 rounded-full bg-slate-800 text-slate-200 border border-slate-700 hover:bg-slate-700">Blue Cart</button>
+        <button data-filter="retail_dropoff" class="filter-btn px-3 py-1.5 rounded-full bg-slate-800 text-slate-200 border border-slate-700 hover:bg-slate-700">Retail Drop-Off</button>
+        <button data-filter="special_facility" class="filter-btn px-3 py-1.5 rounded-full bg-slate-800 text-slate-200 border border-slate-700 hover:bg-slate-700">Goose Island / Hazardous</button>
+        <button data-filter="trash" class="filter-btn px-3 py-1.5 rounded-full bg-slate-800 text-slate-200 border border-slate-700 hover:bg-slate-700">Trash Only</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow max-w-5xl w-full mx-auto px-4 py-8">
+    <div id="resultsCount" class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4"></div>
+    <div id="itemsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    <div id="noResults" class="hidden text-center py-16">
+      <p class="text-slate-500 text-base">No disposal rules found matching that item.</p>
+      <p class="text-slate-400 text-xs mt-1">Try broad terms like "paint", "paper", or "plastic".</p>
+    </div>
+  </main>
+
+  <footer class="bg-white border-t border-slate-200 py-6 px-4 text-xs text-slate-500">
+    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between gap-4">
+      <div>
+        <span class="font-bold text-slate-700">Chicago HCCRF (Goose Island Depot):</span> 1150 N North Branch St.<br>
+        Tuesdays 7am–Noon | Thursdays 2pm–7pm | First Saturday of each month 8am–3pm.
+      </div>
+      <div class="sm:text-right">
+        Chicago Blue Cart rules apply to residential properties with 1–4 units.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const database = [
+      {
+        id: "rechargeable-batteries",
+        name: "Lithium-Ion / Rechargeable Batteries",
+        aliases: ["laptop battery", "drill battery", "vape battery", "cell phone battery", "li-ion"],
+        category: "Hazardous & Electronics",
+        disposalAction: "retail_dropoff",
+        badge: "Drop-Off Required",
+        blueCartAllowed: false,
+        summary: "Never place in Blue or Black carts; batteries spark fires in collection trucks and sorting facilities.",
+        instructions: "Tape terminals with electrical tape. Drop off at collection bins in big-box stores or Goose Island.",
+        locations: [
+          { name: "The Home Depot (Call2Recycle Bin)", type: "Retail", notes: "Bin located near customer entrance.", address: "Citywide retail locations" },
+          { name: "Chicago HCCRF (Goose Island)", type: "Municipal", address: "1150 N North Branch St", notes: "Tues 7am-12pm, Thurs 2pm-7pm, 1st Sat 8am-3pm" }
+        ]
+      },
+      {
+        id: "alkaline-batteries",
+        name: "Alkaline Batteries (Single-Use AA, AAA, 9V)",
+        aliases: ["double a", "triple a", "duracell", "energizer", "standard batteries"],
+        category: "Household Items",
+        disposalAction: "trash",
+        badge: "Black Cart / Trash",
+        blueCartAllowed: false,
+        summary: "Standard single-use alkaline batteries are non-hazardous in Illinois and go in normal trash.",
+        instructions: "Toss in regular household trash. City drop-off facilities do not accept single-use alkaline batteries.",
+        locations: []
+      },
+      {
+        id: "latex-paint",
+        name: "Latex / Water-Based Paint",
+        aliases: ["wall paint", "acrylic paint", "water-based paint"],
+        category: "Chemicals & Paint",
+        disposalAction: "trash",
+        badge: "Dry & Trash",
+        blueCartAllowed: false,
+        summary: "Latex paint is water-based and non-hazardous; it is NOT accepted at Goose Island.",
+        instructions: "Must be completely dried out first. Mix in kitty litter or paint hardener. Leave lid off and place in Black Cart.",
+        locations: []
+      },
+      {
+        id: "oil-based-paint",
+        name: "Oil-Based Paint, Stains & Solvents",
+        aliases: ["wood stain", "paint thinner", "varnish", "mineral spirits"],
+        category: "Chemicals & Paint",
+        disposalAction: "special_facility",
+        badge: "Goose Island Only",
+        blueCartAllowed: false,
+        summary: "Hazardous chemical waste. Flammable and prohibited from landfills and sewers.",
+        instructions: "Keep inside original labeled containers and transport to Goose Island during drop-off hours.",
+        locations: [
+          { name: "Chicago HCCRF (Goose Island)", type: "Municipal", address: "1150 N North Branch St", notes: "Tues 7am-12pm, Thurs 2pm-7pm, 1st Sat 8am-3pm" }
+        ]
+      },
+      {
+        id: "plastic-grocery-bags",
+        name: "Plastic Shopping Bags & Film",
+        aliases: ["jewel bag", "target bag", "bubble wrap", "bread bag", "shrink wrap"],
+        category: "Plastics",
+        disposalAction: "retail_dropoff",
+        badge: "Store Return Only",
+        blueCartAllowed: false,
+        summary: "The #1 recycling contaminant in Chicago. They wrap around sorting machine gears.",
+        instructions: "Never put plastic bags in Blue Carts. Drop clean plastic film into bins at store entrances.",
+        locations: [
+          { name: "Jewel-Osco / Mariano's", type: "Retail", address: "Citywide locations", notes: "Collection bins located in front vestibules." }
+        ]
+      },
+      {
+        id: "pizza-box",
+        name: "Cardboard Pizza Box",
+        aliases: ["takeout box", "pizza carton"],
+        category: "Paper & Cardboard",
+        disposalAction: "blue_cart",
+        badge: "Tear & Split",
+        blueCartAllowed: true,
+        summary: "Food oil compromises paper recycling batches.",
+        instructions: "Tear box in two: place the clean lid into the Blue Cart; throw the oil-stained bottom into the regular trash.",
+        locations: []
+      },
+      {
+        id: "rigid-plastics-1-5",
+        name: "Rigid Plastics #1, #2, #4, #5",
+        aliases: ["yogurt tub", "detergent bottle", "milk jug", "soda bottle", "shampoo bottle"],
+        category: "Plastics",
+        disposalAction: "blue_cart",
+        badge: "Blue Cart Safe",
+        blueCartAllowed: true,
+        summary: "Standard curbside recyclable item.",
+        instructions: "Empty and rinse out food remnants. Keep plastic caps screwed on before placing in cart.",
+        locations: []
+      },
+      {
+        id: "styrofoam",
+        name: "Styrofoam / Polystyrene Foam (#6)",
+        aliases: ["packing peanuts", "takeout clamshell", "foam cooler", "egg carton foam"],
+        category: "Plastics",
+        disposalAction: "trash",
+        badge: "Black Cart / Trash",
+        blueCartAllowed: false,
+        summary: "Polystyrene foam (#6) is strictly prohibited from Chicago Blue Carts.",
+        instructions: "Place inside the standard black trash bin.",
+        locations: []
+      }
+    ];
+
+    const searchInput = document.getElementById('searchInput');
+    const itemsGrid = document.getElementById('itemsGrid');
+    const resultsCount = document.getElementById('resultsCount');
+    const noResults = document.getElementById('noResults');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+
+    let currentFilter = 'all';
+
+    function getBadgeClasses(action) {
+      switch (action) {
+        case 'blue_cart':
+          return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        case 'retail_dropoff':
+          return 'bg-amber-50 text-amber-700 border-amber-200';
+        case 'special_facility':
+          return 'bg-rose-50 text-rose-700 border-rose-200';
+        default:
+          return 'bg-slate-100 text-slate-700 border-slate-200';
+      }
+    }
+
+    function renderItems() {
+      const query = searchInput.value.toLowerCase().trim();
+
+      const filtered = database.filter(item => {
+        const matchesCategory = (currentFilter === 'all') || (item.disposalAction === currentFilter);
+        const matchesQuery = 
+          item.name.toLowerCase().includes(query) ||
+          item.category.toLowerCase().includes(query) ||
+          item.aliases.some(alias => alias.toLowerCase().includes(query));
+
+        return matchesCategory && matchesQuery;
+      });
+
+      itemsGrid.innerHTML = '';
+      resultsCount.textContent = `Showing ${filtered.length} item${filtered.length === 1 ? '' : 's'}`;
+
+      if (filtered.length === 0) {
+        noResults.classList.remove('hidden');
+        return;
+      }
+      noResults.classList.add('hidden');
+
+      filtered.forEach(item => {
+        const card = document.createElement('article');
+        card.className = "bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex flex-col justify-between hover:border-slate-300 transition-colors";
+
+        let locationsHtml = '';
+        if (item.locations && item.locations.length > 0) {
+          locationsHtml = `
+            <div class="mt-4 pt-3 border-t border-slate-100 text-xs">
+              <span class="font-semibold text-slate-700 block mb-1">Recommended Drop-off:</span>
+              ${item.locations.map(loc => `
+                <div class="text-slate-600 mb-1">
+                  <span class="font-medium text-slate-800">${loc.name}</span> — ${loc.address}
+                  ${loc.notes ? `<div class="text-slate-400 italic">${loc.notes}</div>` : ''}
+                </div>
+              `).join('')}
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-start justify-between gap-2 mb-2">
+              <h2 class="font-bold text-slate-900 text-base leading-snug">${item.name}</h2>
+              <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full border whitespace-nowrap ${getBadgeClasses(item.disposalAction)}">
+                ${item.badge}
+              </span>
+            </div>
+            <p class="text-xs text-slate-500 font-medium mb-3">${item.category}</p>
+            <p class="text-xs text-slate-600 mb-2 leading-relaxed">${item.summary}</p>
+            <div class="text-xs text-slate-800 bg-slate-50 p-2.5 rounded-lg border border-slate-100 leading-relaxed">
+              <span class="font-semibold">Action:</span> ${item.instructions}
+            </div>
+          </div>
+          ${locationsHtml}
+        `;
+        itemsGrid.appendChild(card);
+      });
+    }
+
+    searchInput.addEventListener('input', renderItems);
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('bg-sky-500', 'text-white', 'border-sky-500'));
+        btn.classList.add('bg-sky-500', 'text-white', 'border-sky-500');
+        currentFilter = btn.dataset.filter;
+        renderItems();
+      });
+    });
+
+    renderItems();
+  </script>
+</body>
+</html>
