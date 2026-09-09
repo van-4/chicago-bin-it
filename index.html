@@ -8,36 +8,47 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
 
-  <header class="bg-slate-900 text-white border-b border-slate-800 py-10 px-4 text-center">
-    <div class="max-w-3xl mx-auto">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20 mb-3">
-        <span>✶ Chicago Waste & Recycling Directory ✶</span>
-      </div>
-      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Can I Bin It? Chicago</h1>
-      <p class="mt-2 text-slate-400 text-sm sm:text-base">Instant disposal instructions, Blue Cart rules, and Goose Island drop-off guidelines.</p>
-      
-      <div class="mt-6 relative max-w-xl mx-auto">
-        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-        </div>
-        <input 
-          type="text" 
-          id="searchInput" 
-          placeholder="Search an item (e.g., pizza box, lithium battery, latex paint)..."
-          class="w-full pl-11 pr-4 py-3.5 bg-slate-800/90 text-white rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent placeholder-slate-400 text-base shadow-inner"
-          autocomplete="off"
-        >
-      </div>
-
-      <div class="flex flex-wrap justify-center gap-2 mt-4 text-xs font-medium" id="filterContainer">
-        <button data-filter="all" class="filter-btn active px-3 py-1.5 rounded-full bg-slate-800 text-slate-200 border border-slate-700 hover:bg-slate-700">All Items</button>
-        <button data-filter="blue_cart" class="filter-btn px-3 py-1.5 rounded-full bg-slate-800 text-slate-200 border border-slate-700 hover:bg-slate-700">Blue Cart</button>
-        <button data-filter="retail_dropoff" class="filter-btn px-3 py-1.5 rounded-full bg-slate-800 text-slate-200 border border-slate-700 hover:bg-slate-700">Retail Drop-Off</button>
-        <button data-filter="special_facility" class="filter-btn px-3 py-1.5 rounded-full bg-slate-800 text-slate-200 border border-slate-700 hover:bg-slate-700">Goose Island / Hazardous</button>
-        <button data-filter="trash" class="filter-btn px-3 py-1.5 rounded-full bg-slate-800 text-slate-200 border border-slate-700 hover:bg-slate-700">Trash Only</button>
-      </div>
+  <!-- Lake Michigan Deep Gradient Header -->
+<header class="bg-gradient-to-b from-[#0b2545] via-[#134074] to-[#0b2545] text-white border-b-2 border-sky-300/40 py-9 px-4 text-center">
+  <div class="max-w-3xl mx-auto">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 backdrop-blur-md text-sky-200 border border-white/20 mb-3 shadow-inner">
+      <span class="text-red-400 font-bold">✶</span>
+      <span>Chicago Resident Waste Finder</span>
     </div>
-  </header>
+    
+    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight drop-shadow-sm">
+      Can I Bin It? <span class="text-sky-300">Chicago</span>
+    </h1>
+    <p class="mt-2 text-sky-100/80 text-xs sm:text-sm max-w-md mx-auto leading-relaxed">
+      Stop contamination fines. Check curbside eligibility and local drop-off depots instantly.
+    </p>
+    
+    <!-- Translucent Frosted Glass Search Bar -->
+    <div class="mt-6 relative max-w-xl mx-auto">
+      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-sky-200">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+      </div>
+      <input 
+        type="search" 
+        id="searchInput" 
+        placeholder="Type an item (e.g. coffee cup, batteries, pizza box)..."
+        class="w-full pl-11 pr-4 py-3.5 bg-black/25 backdrop-blur-md text-white rounded-xl border border-white/20 focus:outline-none focus:ring-2 focus:ring-sky-300 focus:bg-black/40 placeholder-sky-200/60 text-sm sm:text-base shadow-xl transition-all"
+        autocomplete="off"
+      >
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="flex overflow-x-auto gap-1.5 mt-5 text-xs font-medium pb-1 justify-start sm:justify-center no-scrollbar" id="filterContainer">
+      <button data-filter="all" class="filter-btn active whitespace-nowrap px-3.5 py-1.5 rounded-lg bg-sky-400 text-slate-900 font-bold">All Items</button>
+      <button data-filter="blue_cart" class="filter-btn whitespace-nowrap px-3.5 py-1.5 rounded-lg bg-white/10 text-sky-100 hover:bg-white/20 border border-white/10">Blue Cart</button>
+      <button data-filter="retail_dropoff" class="filter-btn whitespace-nowrap px-3.5 py-1.5 rounded-lg bg-white/10 text-sky-100 hover:bg-white/20 border border-white/10">Retail Return</button>
+      <button data-filter="special_facility" class="filter-btn whitespace-nowrap px-3.5 py-1.5 rounded-lg bg-white/10 text-sky-100 hover:bg-white/20 border border-white/10">Goose Island</button>
+      <button data-filter="trash" class="filter-btn whitespace-nowrap px-3.5 py-1.5 rounded-lg bg-white/10 text-sky-100 hover:bg-white/20 border border-white/10">Trash Only</button>
+    </div>
+  </div>
+</header>
 
   <main class="flex-grow max-w-5xl w-full mx-auto px-4 py-8">
     <div id="resultsCount" class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4"></div>
