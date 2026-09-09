@@ -66,7 +66,7 @@
     <!-- Main Results & Home View Wrapper -->
     <main class="flex-grow max-w-5xl w-full mx-auto px-4 py-8">
 
-      <!-- SECTION A: Curated 4 Popular Items (Shows only on clean landing) -->
+      <!-- SECTION A: Curated 4 Popular Items (Landing View) -->
       <section id="popularSection" class="space-y-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
@@ -108,7 +108,7 @@
     </main>
   </div>
 
-  <!-- ================= DETAIL VIEW (Opens on Card Click) ================= -->
+  <!-- ================= DETAIL VIEW ================= -->
   <div id="detailView" class="hidden flex-grow flex flex-col bg-slate-100 min-h-screen">
     <!-- Top Bar -->
     <div class="bg-slate-900 text-white border-b border-slate-800 py-3.5 px-4 sticky top-0 z-30 shadow-md">
@@ -177,44 +177,54 @@
         <div id="compostPartnerList" class="space-y-3 pt-1"></div>
       </div>
 
-      <!-- Drop-Off Location & Dynamic ZIP Code Finder -->
+      <!-- Drop-Off Location & Dynamic Proximity Finder -->
       <div id="detailLocationCard" class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
         <div class="flex items-center justify-between">
           <div>
-            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Designated Drop-Off Option</h3>
-            <p id="detailLocName" class="text-base font-extrabold text-slate-800 mt-0.5"></p>
+            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Nearest Drop-Off Location</h3>
+            <p id="detailLocName" class="text-base sm:text-lg font-extrabold text-slate-900 mt-0.5"></p>
           </div>
-          <span id="detailLocType" class="text-[11px] font-semibold bg-slate-100 text-slate-600 px-2 py-0.5 rounded border border-slate-200"></span>
+          <span id="detailLocType" class="text-[11px] font-semibold bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded border border-slate-200"></span>
         </div>
 
         <!-- ZIP Code Search Tool -->
         <div id="zipToolContainer" class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
-          <label for="zipInput" class="block text-xs font-bold text-slate-700">Find the closest drop-off to your ward / neighborhood:</label>
+          <label for="zipInput" class="block text-xs font-bold text-slate-700">Find nearest location to your neighborhood:</label>
           <div class="flex gap-2">
             <input 
               type="text" 
               id="zipInput" 
               maxlength="5" 
-              placeholder="Enter 5-digit Chicago ZIP (e.g. 60619, 60624)" 
-              class="flex-grow px-3 py-2 text-xs sm:text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-900 font-mono"
+              placeholder="Enter Chicago ZIP (e.g. 60619, 60637, 60647)" 
+              class="flex-grow px-3 py-2 text-xs sm:text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-900 font-medium font-mono"
             >
-            <button id="findZipBtn" class="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition-all">
-              Update Map
+            <button id="findZipBtn" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition-all shadow-sm whitespace-nowrap">
+              Find Nearest
             </button>
           </div>
           <p id="zipFeedback" class="text-[11px] text-slate-500 font-medium"></p>
         </div>
 
-        <p id="detailLocAddress" class="text-xs text-slate-600"></p>
+        <!-- Calculated Nearest Banner -->
+        <div id="nearestResultCard" class="p-3.5 bg-sky-50 border border-sky-200/80 rounded-xl flex items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span id="nearestChainBadge" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-sky-200 text-sky-900"></span>
+              <span id="nearestDistance" class="text-xs font-black text-sky-900"></span>
+            </div>
+            <p id="detailLocAddress" class="text-xs text-slate-700 font-medium mt-1"></p>
+          </div>
+        </div>
+
         <p id="detailLocNotes" class="text-xs text-amber-800 bg-amber-50 p-2.5 rounded-lg border border-amber-200/60"></p>
 
         <!-- Google Maps Embed -->
-        <div class="relative w-full aspect-square sm:aspect-video rounded-xl overflow-hidden border border-slate-200 shadow-inner mt-3">
+        <div class="relative w-full aspect-square sm:aspect-video rounded-xl overflow-hidden border border-slate-200 shadow-inner">
           <iframe 
             id="detailMapIframe" 
             class="w-full h-full border-0" 
             loading="lazy" 
-            referrerpolicy="no-referrer-when-downgrade"
+            referrerpolicy="no-referrer-when-downgrade" 
             src=""
           ></iframe>
         </div>
@@ -249,7 +259,7 @@
     </div>
   </footer>
 
-  <!-- ================= APP LOGIC ================= -->
+  <!-- ================= APP SCRIPT ================= -->
   <script>
     // Database: Only 4 items marked popular: true
     const database = [
@@ -286,20 +296,20 @@
         location: {
           name: "The Home Depot (Call2Recycle Drop Box)",
           type: "Retail Partner Drop-off",
-          address: "Citywide retail drop-off kiosks",
+          address: "Enter your ZIP code to find the nearest hardware drop box.",
           notes: "Collection box usually located right inside the entrance vestibule near customer service.",
-          searchCategory: "Home+Depot+Chicago+IL",
-          regionalBranches: {
-            south: { name: "The Home Depot - Chatham Ridge", address: "87 W 87th St, Chicago, IL 60620", query: "Home+Depot+87+W+87th+St+Chicago+IL" },
-            southwest: { name: "The Home Depot - West Elsdon", address: "4555 S Western Blvd, Chicago, IL 60609", query: "Home+Depot+4555+S+Western+Blvd+Chicago+IL" },
-            central: { name: "The Home Depot - South Loop", address: "1300 S Clinton St, Chicago, IL 60607", query: "Home+Depot+1300+S+Clinton+St+Chicago+IL" },
-            north: { name: "The Home Depot - Lincoln Park", address: "1232 W North Ave, Chicago, IL 60642", query: "Home+Depot+1232+W+North+Ave+Chicago+IL" }
-          }
+          locations: [
+            { name: "The Home Depot - Chatham Ridge", chain: "The Home Depot", address: "87 W 87th St, Chicago, IL 60620", lat: 41.7360, lng: -87.6268 },
+            { name: "The Home Depot - West Elsdon", chain: "The Home Depot", address: "4555 S Western Blvd, Chicago, IL 60609", lat: 41.8105, lng: -87.6845 },
+            { name: "The Home Depot - South Loop", chain: "The Home Depot", address: "1300 S Clinton St, Chicago, IL 60607", lat: 41.8655, lng: -87.6410 },
+            { name: "The Home Depot - Lincoln Park", chain: "The Home Depot", address: "1232 W North Ave, Chicago, IL 60642", lat: 41.9108, lng: -87.6590 },
+            { name: "The Home Depot - Lakeview", chain: "The Home Depot", address: "2844 N Broadway, Chicago, IL 60657", lat: 41.9335, lng: -87.6435 }
+          ]
         }
       },
       {
         id: "plastic-grocery-bags",
-        name: "Plastic Grocery Bags & Plastic Film",
+        name: "Plastic Grocery Bags & Film",
         popular: true,
         imageUrl: "https://images.unsplash.com/photo-1597348989645-46b190ce4918?auto=format&fit=crop&w=600&q=80",
         aliases: ["bag", "bags", "plastic bag", "grocery bag", "shopping bag", "jewel bag", "marianos bag", "target bag", "bread bag", "produce bag", "ziploc", "shrink wrap", "bubble wrap"],
@@ -312,17 +322,43 @@
         partnerEligible: false,
         diyTip: "Save clean bags to line small bathroom wastebaskets or keep inside winter boots and purses to preserve their shape in storage.",
         location: {
-          name: "Jewel-Osco / Target Film Return",
-          type: "Grocery Vestibule Drop-Off",
-          address: "Available at all grocery stores citywide",
-          notes: "Place loose plastic film directly into the blue bin between the sliding entrance doors.",
-          searchCategory: "Jewel+Osco+Chicago+IL",
-          regionalBranches: {
-            south: { name: "Jewel-Osco - Chatham / Grand Crossing", address: "87 W 87th St, Chicago, IL 60620", query: "Jewel+Osco+87+W+87th+St+Chicago+IL" },
-            southwest: { name: "Jewel-Osco - Archer Heights", address: "5050 S Archer Ave, Chicago, IL 60632", query: "Jewel+Osco+5050+S+Archer+Ave+Chicago+IL" },
-            central: { name: "Jewel-Osco - South Loop", address: "1224 S Wabash Ave, Chicago, IL 60605", query: "Jewel+Osco+1224+S+Wabash+Ave+Chicago+IL" },
-            north: { name: "Jewel-Osco - Wicker Park", address: "1341 N Paulina St, Chicago, IL 60622", query: "Jewel+Osco+1341+N+Paulina+St+Chicago+IL" }
-          }
+          name: "Grocery & Retail Film Return",
+          type: "Retail Return Kiosk",
+          address: "Enter your ZIP code to find the nearest store drop-off.",
+          notes: "Place clean, dry plastic grocery bags directly into collection bins located in front entrance vestibules.",
+          locations: [
+            // South & Far South
+            { name: "Jewel-Osco - Chatham", chain: "Jewel-Osco", address: "87 W 87th St, Chicago, IL 60620", lat: 41.7360, lng: -87.6268 },
+            { name: "Jewel-Osco - South Shore", chain: "Jewel-Osco", address: "7530 S Stony Island Ave, Chicago, IL 60649", lat: 41.7580, lng: -87.5855 },
+            { name: "Jewel-Osco - Woodlawn", chain: "Jewel-Osco", address: "6014 S Cottage Grove Ave, Chicago, IL 60637", lat: 41.7852, lng: -87.6062 },
+            { name: "Target - Hyde Park", chain: "Target", address: "1346 E 53rd St, Chicago, IL 60615", lat: 41.7994, lng: -87.5925 },
+            { name: "Jewel-Osco - Beverly", chain: "Jewel-Osco", address: "9400 S Ashland Ave, Chicago, IL 60620", lat: 41.7225, lng: -87.6625 },
+
+            // Southwest
+            { name: "Jewel-Osco - Archer Heights", chain: "Jewel-Osco", address: "5050 S Archer Ave, Chicago, IL 60632", lat: 41.8021, lng: -87.7240 },
+            { name: "Target - South Pulaski", chain: "Target", address: "4433 S Pulaski Rd, Chicago, IL 60632", lat: 41.8123, lng: -87.7235 },
+            { name: "Target - McKinley Park", chain: "Target", address: "1940 W 33rd St, Chicago, IL 60608", lat: 41.8340, lng: -87.6740 },
+            { name: "Jewel-Osco - Brighton Park", chain: "Jewel-Osco", address: "4938 S Kedzie Ave, Chicago, IL 60632", lat: 41.8035, lng: -87.7032 },
+
+            // Central & Loop
+            { name: "Target - South Loop", chain: "Target", address: "1154 S Clark St, Chicago, IL 60605", lat: 41.8682, lng: -87.6305 },
+            { name: "Jewel-Osco - South Loop", chain: "Jewel-Osco", address: "1224 S Wabash Ave, Chicago, IL 60605", lat: 41.8669, lng: -87.6258 },
+            { name: "Mariano's - South Loop", chain: "Mariano's", address: "1615 S Clark St, Chicago, IL 60616", lat: 41.8596, lng: -87.6306 },
+            { name: "Target - West Loop", chain: "Target", address: "1101 W Jackson Blvd, Chicago, IL 60607", lat: 41.8778, lng: -87.6548 },
+            { name: "Jewel-Osco - Near West Side", chain: "Jewel-Osco", address: "1220 S Ashland Ave, Chicago, IL 60608", lat: 41.8663, lng: -87.6660 },
+
+            // West & Northwest
+            { name: "Target - Logan Square", chain: "Target", address: "2434 N Sacramento Ave, Chicago, IL 60647", lat: 41.9262, lng: -87.7020 },
+            { name: "Target - Brickyard", chain: "Target", address: "6456 W Diversey Ave, Chicago, IL 60635", lat: 41.9304, lng: -87.7876 },
+            { name: "Target - Cicero / Austin Border", chain: "Target", address: "2901 S Cicero Ave, Cicero, IL 60804", lat: 41.8385, lng: -87.7435 },
+
+            // North & Lakeview
+            { name: "Target - Wicker Park", chain: "Target", address: "1664 W Division St, Chicago, IL 60622", lat: 41.9034, lng: -87.6702 },
+            { name: "Jewel-Osco - Wicker Park", chain: "Jewel-Osco", address: "1341 N Paulina St, Chicago, IL 60622", lat: 41.9062, lng: -87.6698 },
+            { name: "Mariano's - Ravenswood", chain: "Mariano's", address: "1800 W Lawrence Ave, Chicago, IL 60640", lat: 41.9688, lng: -87.6748 },
+            { name: "Target - Lincoln Park North", chain: "Target", address: "2650 N Clark St, Chicago, IL 60614", lat: 41.9305, lng: -87.6444 },
+            { name: "Mariano's - Lakeview", chain: "Mariano's", address: "3030 N Broadway, Chicago, IL 60657", lat: 41.9372, lng: -87.6442 }
+          ]
         }
       },
       {
@@ -367,8 +403,7 @@
           type: "City Hazardous Depot",
           address: "1150 N North Branch St, Chicago, IL 60642",
           notes: "Open Tuesdays 7am–12pm, Thursdays 2pm–7pm, and 1st Saturday of each month 8am–3pm. Only city facility for oil paint.",
-          searchCategory: "1150+N+North+Branch+St+Chicago+IL",
-          regionalBranches: null
+          locations: null
         }
       },
       {
@@ -390,8 +425,7 @@
           type: "Hauler Service",
           address: "Direct in-home or alley pickup across Chicago",
           notes: "Upfront guaranteed pricing. Avoids city alley tickets.",
-          searchCategory: "Chicago+IL",
-          regionalBranches: null
+          locations: null
         }
       },
       {
@@ -414,17 +448,17 @@
         ],
         diyTip: "Collect vegetable trimmings in a freezer bag; boil for 45 mins when full to make rich homemade vegetable stock.",
         location: {
-          name: "City of Chicago Community Compost Drop-Off",
+          name: "City Community Food Scrap Hubs",
           type: "Municipal Drop-off",
-          address: "Over 33 free drop-off hubs across North, West, and South Side neighborhoods",
-          notes: "Free for Chicago residents. Open daily 7am-7pm. Drop into designated green lidded carts.",
-          searchCategory: "Chicago+Food+Scrap+Drop+Off",
-          regionalBranches: {
-            south: { name: "South Side Hub - Woodson Regional Library", address: "9525 S Halsted St, Chicago, IL 60628", query: "9525+S+Halsted+St+Chicago+IL" },
-            southwest: { name: "Southwest Hub - West Elsdon Park Site", address: "3720 W 55th St, Chicago, IL 60632", query: "3720+W+55th+St+Chicago+IL" },
-            central: { name: "Near South Hub - 1758 S Clark St", address: "1758 S Clark St, Chicago, IL 60616", query: "1758+S+Clark+St+Chicago+IL" },
-            north: { name: "North Side Hub - Ravenswood Site", address: "6447 N Ravenswood Ave, Chicago, IL 60626", query: "6447+N+Ravenswood+Ave+Chicago+IL" }
-          }
+          address: "Enter your ZIP code to find your closest community food scrap station.",
+          notes: "Free for registered Chicago residents. Open daily 7am-7pm. Drop into green lidded bins.",
+          locations: [
+            { name: "South Side Hub - Woodson Regional Library", chain: "City Food Scrap", address: "9525 S Halsted St, Chicago, IL 60628", lat: 41.7212, lng: -87.6432 },
+            { name: "Southwest Hub - West Elsdon Park", chain: "City Food Scrap", address: "3720 W 55th St, Chicago, IL 60632", lat: 41.7925, lng: -87.7160 },
+            { name: "Near South Hub - South Loop", chain: "City Food Scrap", address: "1758 S Clark St, Chicago, IL 60616", lat: 41.8580, lng: -87.6300 },
+            { name: "West Side Hub - Garfield Park", chain: "City Food Scrap", address: "100 N Central Park Ave, Chicago, IL 60624", lat: 41.8830, lng: -87.7165 },
+            { name: "North Side Hub - Ravenswood Station", chain: "City Food Scrap", address: "6447 N Ravenswood Ave, Chicago, IL 60626", lat: 42.0000, lng: -87.6740 }
+          ]
         }
       },
       {
@@ -446,8 +480,7 @@
           type: "City Hazardous Depot",
           address: "1150 N North Branch St, Chicago, IL 60642",
           notes: "Tuesdays 7am–12pm, Thursdays 2pm–7pm, 1st Saturday of each month 8am–3pm.",
-          searchCategory: "1150+N+North+Branch+St+Chicago+IL",
-          regionalBranches: null
+          locations: null
         }
       },
       {
@@ -481,20 +514,65 @@
         partnerEligible: false,
         diyTip: null,
         location: {
-          name: "AutoZone / Advance Auto Parts",
+          name: "AutoZone Parts Drop-Off",
           type: "Automotive Drop-Off",
-          address: "Citywide retail stores across all neighborhoods",
+          address: "Enter your ZIP code to find the nearest participating store.",
           notes: "Free used motor oil collection up to 5 gallons per customer.",
-          searchCategory: "AutoZone+Chicago+IL",
-          regionalBranches: {
-            south: { name: "AutoZone - Roseland / Chatham", address: "10320 S Michigan Ave, Chicago, IL 60628", query: "AutoZone+10320+S+Michigan+Ave+Chicago+IL" },
-            southwest: { name: "AutoZone - Gage Park", address: "5500 S Kedzie Ave, Chicago, IL 60629", query: "AutoZone+5500+S+Kedzie+Ave+Chicago+IL" },
-            central: { name: "AutoZone - Pilsen / Near West", address: "1701 S Ashland Ave, Chicago, IL 60608", query: "AutoZone+1701+S+Ashland+Ave+Chicago+IL" },
-            north: { name: "AutoZone - Lincoln Park", address: "1005 W Webster Ave, Chicago, IL 60614", query: "AutoZone+1005+W+Webster+Ave+Chicago+IL" }
-          }
+          locations: [
+            { name: "AutoZone - Roseland / Chatham", chain: "AutoZone", address: "10320 S Michigan Ave, Chicago, IL 60628", lat: 41.7065, lng: -87.6200 },
+            { name: "AutoZone - Gage Park", chain: "AutoZone", address: "5500 S Kedzie Ave, Chicago, IL 60629", lat: 41.7925, lng: -87.7030 },
+            { name: "AutoZone - Pilsen", chain: "AutoZone", address: "1701 S Ashland Ave, Chicago, IL 60608", lat: 41.8585, lng: -87.6660 },
+            { name: "AutoZone - Lincoln Park", chain: "AutoZone", address: "1005 W Webster Ave, Chicago, IL 60614", lat: 41.9215, lng: -87.6535 },
+            { name: "AutoZone - Avondale", chain: "AutoZone", address: "3131 N Western Ave, Chicago, IL 60618", lat: 41.9385, lng: -87.6880 }
+          ]
         }
       }
     ];
+
+    // Chicago Centroid Coordinates by ZIP Code
+    const chicagoZipCoordinates = {
+      "60601": { lat: 41.8860, lng: -87.6220 }, "60602": { lat: 41.8830, lng: -87.6280 },
+      "60603": { lat: 41.8800, lng: -87.6280 }, "60604": { lat: 41.8780, lng: -87.6290 },
+      "60605": { lat: 41.8670, lng: -87.6240 }, "60606": { lat: 41.8820, lng: -87.6370 },
+      "60607": { lat: 41.8740, lng: -87.6510 }, "60608": { lat: 41.8490, lng: -87.6690 },
+      "60609": { lat: 41.8120, lng: -87.6560 }, "60610": { lat: 41.9000, lng: -87.6370 },
+      "60611": { lat: 41.8940, lng: -87.6220 }, "60612": { lat: 41.8800, lng: -87.6870 },
+      "60613": { lat: 41.9540, lng: -87.6570 }, "60614": { lat: 41.9220, lng: -87.6520 },
+      "60615": { lat: 41.8010, lng: -87.6030 }, "60616": { lat: 41.8440, lng: -87.6290 },
+      "60617": { lat: 41.7160, lng: -87.5550 }, "60618": { lat: 41.9460, lng: -87.7030 },
+      "60619": { lat: 41.7440, lng: -87.6050 }, "60620": { lat: 41.7400, lng: -87.6530 },
+      "60621": { lat: 41.7760, lng: -87.6430 }, "60622": { lat: 41.9020, lng: -87.6830 },
+      "60623": { lat: 41.8480, lng: -87.7160 }, "60624": { lat: 41.8800, lng: -87.7230 },
+      "60625": { lat: 41.9710, lng: -87.7030 }, "60626": { lat: 42.0090, lng: -87.6690 },
+      "60628": { lat: 41.6910, lng: -87.6220 }, "60629": { lat: 41.7760, lng: -87.7120 },
+      "60630": { lat: 41.9720, lng: -87.7570 }, "60631": { lat: 41.9950, lng: -87.8130 },
+      "60632": { lat: 41.8100, lng: -87.7120 }, "60633": { lat: 41.6570, lng: -87.5550 },
+      "60634": { lat: 41.9440, lng: -87.7970 }, "60636": { lat: 41.7750, lng: -87.6690 },
+      "60637": { lat: 41.7800, lng: -87.6030 }, "60638": { lat: 41.7820, lng: -87.7710 },
+      "60639": { lat: 41.9200, lng: -87.7560 }, "60640": { lat: 41.9720, lng: -87.6580 },
+      "60641": { lat: 41.9460, lng: -87.7470 }, "60642": { lat: 41.9000, lng: -87.6570 },
+      "60643": { lat: 41.7010, lng: -87.6610 }, "60644": { lat: 41.8810, lng: -87.7570 },
+      "60645": { lat: 42.0080, lng: -87.6950 }, "60646": { lat: 41.9930, lng: -87.7600 },
+      "60647": { lat: 41.9210, lng: -87.6970 }, "60649": { lat: 41.7630, lng: -87.5680 },
+      "60651": { lat: 41.9020, lng: -87.7410 }, "60652": { lat: 41.7450, lng: -87.7120 },
+      "60653": { lat: 41.8190, lng: -87.6110 }, "60654": { lat: 41.8920, lng: -87.6360 },
+      "60655": { lat: 41.6940, lng: -87.7120 }, "60656": { lat: 41.9740, lng: -87.8160 },
+      "60657": { lat: 41.9400, lng: -87.6540 }, "60659": { lat: 41.9910, lng: -87.7040 },
+      "60660": { lat: 41.9910, lng: -87.6600 }, "60661": { lat: 41.8820, lng: -87.6440 }
+    };
+
+    // Haversine formula
+    function calculateDistanceMiles(lat1, lon1, lat2, lon2) {
+      const R = 3958.8; // Earth's radius in miles
+      const dLat = (lat2 - lat1) * (Math.PI / 180);
+      const dLon = (lon2 - lon1) * (Math.PI / 180);
+      const a = 
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * 
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c;
+    }
 
     // DOM References
     const searchView = document.getElementById('searchView');
@@ -513,8 +591,7 @@
     const collapseResultsBtn = document.getElementById('collapseResultsBtn');
     const backBtn = document.getElementById('backBtn');
 
-    // ZIP Code Elements
-    const zipToolContainer = document.getElementById('zipToolContainer');
+    // ZIP Elements
     const zipInput = document.getElementById('zipInput');
     const findZipBtn = document.getElementById('findZipBtn');
     const zipFeedback = document.getElementById('zipFeedback');
@@ -532,7 +609,7 @@
       }
     }
 
-    // Creates card markup
+    // Creates card markup (aliases are kept out of the DOM for cleaner presentation)
     function createCard(item) {
       const card = document.createElement('a');
       card.href = `#${item.id}`;
@@ -625,57 +702,55 @@
       filtered.forEach(item => itemsGrid.appendChild(createCard(item)));
     }
 
-    // Regional ZIP code mapping for Chicago
-    function resolveChicagoRegion(zip) {
-      const z = parseInt(zip, 10);
-      if (isNaN(z)) return null;
-
-      // Far South & South Side
-      if ([60617, 60619, 60620, 60621, 60628, 60633, 60637, 60643, 60649, 60653, 60655].includes(z)) {
-        return 'south';
-      }
-      // Southwest Side
-      if ([60609, 60629, 60632, 60638, 60652].includes(z)) {
-        return 'southwest';
-      }
-      // Central / Near West / Loop
-      if ([60601, 60602, 60603, 60604, 60605, 60606, 60607, 60608, 60611, 60616, 60624, 60644, 60661].includes(z)) {
-        return 'central';
-      }
-      // North & Northwest Side
-      return 'north';
-    }
-
-    function updateLocationByZip() {
+    // Proximity search logic (Haversine distance calculation)
+    function findNearestDropoff() {
       if (!currentActiveItem || !currentActiveItem.location) return;
 
-      const zip = zipInput.value.trim();
+      const inputVal = zipInput.value.trim();
       const loc = currentActiveItem.location;
 
-      if (!zip || zip.length < 5) {
-        zipFeedback.textContent = "Please enter a valid 5-digit Chicago ZIP.";
+      if (!inputVal) {
+        zipFeedback.textContent = "Please enter your 5-digit Chicago ZIP code.";
         return;
       }
 
-      // If item has decentralized retail/branch dropoffs
-      if (loc.regionalBranches) {
-        const region = resolveChicagoRegion(zip);
-        const branch = loc.regionalBranches[region] || loc.regionalBranches['central'];
+      if (loc.locations && Array.isArray(loc.locations)) {
+        const zipMatch = inputVal.match(/\b\d{5}\b/);
+        let userCoords = null;
 
-        document.getElementById('detailLocName').textContent = branch.name;
-        document.getElementById('detailLocAddress').textContent = branch.address;
+        if (zipMatch && chicagoZipCoordinates[zipMatch[0]]) {
+          userCoords = chicagoZipCoordinates[zipMatch[0]];
+        } else {
+          // Default to Central Chicago coordinates if ZIP is outside city dict
+          userCoords = { lat: 41.8781, lng: -87.6298 };
+        }
 
-        const embedUrl = `https://maps.google.com/maps?q=${branch.query}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
-        document.getElementById('detailMapIframe').src = embedUrl;
-        document.getElementById('detailDirectionsLink').href = `https://www.google.com/maps/search/?api=1&query=${branch.query}`;
+        // Calculate straight-line distance and sort ascending
+        const sorted = loc.locations.map(store => {
+          const dist = calculateDistanceMiles(userCoords.lat, userCoords.lng, store.lat, store.lng);
+          return { ...store, distance: dist };
+        }).sort((a, b) => a.distance - b.distance);
 
-        zipFeedback.textContent = `Showing nearest site for ZIP ${zip} (${region.toUpperCase()} region).`;
+        const nearest = sorted[0];
+
+        // Update UI
+        document.getElementById('detailLocName').textContent = nearest.name;
+        document.getElementById('detailLocAddress').textContent = nearest.address;
+        document.getElementById('nearestChainBadge').textContent = nearest.chain;
+        document.getElementById('nearestDistance').textContent = `~${nearest.distance.toFixed(1)} miles away`;
+
+        const query = encodeURIComponent(nearest.name + " " + nearest.address);
+        document.getElementById('detailMapIframe').src = `https://maps.google.com/maps?q=${query}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+        document.getElementById('detailDirectionsLink').href = `https://www.google.com/maps/search/?api=1&query=${query}`;
+
+        zipFeedback.textContent = `Closest drop-off located for ZIP ${inputVal}.`;
       } else {
-        // Goose Island single central depot
-        const embedUrl = `https://maps.google.com/maps?q=${loc.searchCategory}+near+${zip}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
-        document.getElementById('detailMapIframe').src = embedUrl;
-        document.getElementById('detailDirectionsLink').href = `https://www.google.com/maps/search/?api=1&query=${loc.searchCategory}+near+${zip}`;
-        zipFeedback.textContent = `Showing routes from ZIP ${zip} to the designated facility.`;
+        // Central single facility (like Goose Island)
+        const query = encodeURIComponent(loc.name + " " + loc.address);
+        document.getElementById('detailMapIframe').src = `https://maps.google.com/maps?q=${query}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
+        document.getElementById('detailDirectionsLink').href = `https://www.google.com/maps/search/?api=1&query=${query}`;
+        document.getElementById('nearestDistance').textContent = "Designated Central Facility";
+        zipFeedback.textContent = `Routes to designated central facility from ${inputVal}.`;
       }
     }
 
@@ -767,7 +842,7 @@
         compostCard.classList.add('hidden');
       }
 
-      // Location & Maps Embed Setup
+      // Location & Maps Setup
       const locCard = document.getElementById('detailLocationCard');
       if (item.location) {
         locCard.classList.remove('hidden');
@@ -776,16 +851,15 @@
         document.getElementById('detailLocAddress').textContent = item.location.address;
         document.getElementById('detailLocNotes').textContent = item.location.notes;
 
-        // Reset ZIP input
         zipInput.value = '';
-        zipFeedback.textContent = item.location.regionalBranches 
-          ? 'Enter your Chicago ZIP to see the closest retail or community location.' 
-          : 'Central municipal depot serving all wards.';
+        document.getElementById('nearestChainBadge').textContent = item.location.name.split(' ')[0];
+        document.getElementById('nearestDistance').textContent = item.location.locations ? "Sorted by distance" : "Official Facility";
+        zipFeedback.textContent = "Enter your 5-digit Chicago ZIP code above to find the closest drop-off.";
 
-        // Initial default embed
-        const embedUrl = `https://maps.google.com/maps?q=${item.location.searchCategory}&t=&z=12&ie=UTF8&iwloc=&output=embed`;
-        document.getElementById('detailMapIframe').src = embedUrl;
-        document.getElementById('detailDirectionsLink').href = `https://www.google.com/maps/search/?api=1&query=${item.location.searchCategory}`;
+        // Default initial map view
+        const defaultQuery = encodeURIComponent(item.location.name + " Chicago IL");
+        document.getElementById('detailMapIframe').src = `https://maps.google.com/maps?q=${defaultQuery}&t=&z=12&ie=UTF8&iwloc=&output=embed`;
+        document.getElementById('detailDirectionsLink').href = `https://www.google.com/maps/search/?api=1&query=${defaultQuery}`;
       } else {
         locCard.classList.add('hidden');
       }
@@ -817,7 +891,7 @@
       showSearch();
     }
 
-    // Listeners
+    // Event Listeners
     searchInput.addEventListener('input', () => {
       isBrowsingAll = false;
       updateFeed();
@@ -862,9 +936,9 @@
       });
     });
 
-    findZipBtn.addEventListener('click', updateLocationByZip);
+    findZipBtn.addEventListener('click', findNearestDropoff);
     zipInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') updateLocationByZip();
+      if (e.key === 'Enter') findNearestDropoff();
     });
 
     backBtn.addEventListener('click', () => {
