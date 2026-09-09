@@ -66,22 +66,22 @@
     <!-- Main Results & Home View Wrapper -->
     <main class="flex-grow max-w-5xl w-full mx-auto px-4 py-8">
 
-      <!-- SECTION A: Curated Popular Items (Shows only on clean landing) -->
+      <!-- SECTION A: Curated 4 Popular Items (Shows only on clean landing) -->
       <section id="popularSection" class="space-y-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <span class="text-rose-500 font-bold">✶</span>
-            <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500">Frequently Searched Items</h2>
+            <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500">Most Common Questions</h2>
           </div>
-          <span class="text-[11px] text-slate-400">Most common alley citations</span>
+          <span class="text-[11px] text-slate-400">High-confusion curbside items</span>
         </div>
 
-        <div id="popularGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5"></div>
+        <div id="popularGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
 
         <!-- "Browse All Items" Toggle Button -->
         <div class="pt-6 pb-2 text-center">
           <button id="browseAllBtn" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white border border-slate-300 text-slate-700 text-xs font-bold hover:bg-slate-50 hover:border-slate-400 transition-all shadow-sm">
-            <span>Browse All Items in Directory</span>
+            <span>Browse Full Chicago Directory</span>
             <span id="browseAllCount" class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full text-[10px]"></span>
             <span>↓</span>
           </button>
@@ -115,7 +115,7 @@
       <div class="max-w-3xl mx-auto flex items-center justify-between">
         <button id="backBtn" class="flex items-center gap-1.5 text-xs font-semibold text-sky-400 hover:text-sky-300 active:scale-95 transition-all">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
-          Back to Directory
+          Back to Search
         </button>
         <span id="detailBadge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full border"></span>
       </div>
@@ -136,23 +136,17 @@
         <!-- Required Action Banner -->
         <div class="mt-5 p-4 rounded-xl bg-slate-50 border border-slate-200/80">
           <div class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-1 flex items-center gap-1">
-            <span class="text-sky-500">▶</span> Mandatory Action
+            <span class="text-sky-500">▶</span> Official Chicago Rule
           </div>
           <p id="detailInstructions" class="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium"></p>
         </div>
-      </div>
-
-      <!-- Specific Examples Card -->
-      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-        <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-3">Included Examples & Synonyms</h3>
-        <div id="detailExamples" class="flex flex-wrap gap-2"></div>
       </div>
 
       <!-- DIY & Upcycle Tip Card (Conditional) -->
       <div id="detailDiyCard" class="hidden bg-emerald-50 rounded-2xl p-6 border border-emerald-200/80 shadow-sm space-y-2">
         <div class="flex items-center gap-2">
           <span class="px-2 py-0.5 rounded bg-emerald-600 text-white text-[10px] font-extrabold">🌱 DIY</span>
-          <h3 class="text-xs font-bold text-emerald-900 uppercase tracking-wider">Upcycle & Reuse Tip</h3>
+          <h3 class="text-xs font-bold text-emerald-900 uppercase tracking-wider">Upcycle & Reuse Idea</h3>
         </div>
         <p id="detailDiyTip" class="text-xs sm:text-sm text-emerald-800 leading-relaxed font-medium"></p>
       </div>
@@ -183,14 +177,32 @@
         <div id="compostPartnerList" class="space-y-3 pt-1"></div>
       </div>
 
-      <!-- Drop-Off Location & Maps Embed -->
+      <!-- Drop-Off Location & Dynamic ZIP Code Finder -->
       <div id="detailLocationCard" class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
         <div class="flex items-center justify-between">
           <div>
-            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Designated Drop-Off Location</h3>
+            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Designated Drop-Off Option</h3>
             <p id="detailLocName" class="text-base font-extrabold text-slate-800 mt-0.5"></p>
           </div>
           <span id="detailLocType" class="text-[11px] font-semibold bg-slate-100 text-slate-600 px-2 py-0.5 rounded border border-slate-200"></span>
+        </div>
+
+        <!-- ZIP Code Search Tool -->
+        <div id="zipToolContainer" class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+          <label for="zipInput" class="block text-xs font-bold text-slate-700">Find the closest drop-off to your ward / neighborhood:</label>
+          <div class="flex gap-2">
+            <input 
+              type="text" 
+              id="zipInput" 
+              maxlength="5" 
+              placeholder="Enter 5-digit Chicago ZIP (e.g. 60619, 60624)" 
+              class="flex-grow px-3 py-2 text-xs sm:text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-900 font-mono"
+            >
+            <button id="findZipBtn" class="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition-all">
+              Update Map
+            </button>
+          </div>
+          <p id="zipFeedback" class="text-[11px] text-slate-500 font-medium"></p>
         </div>
 
         <p id="detailLocAddress" class="text-xs text-slate-600"></p>
@@ -239,6 +251,7 @@
 
   <!-- ================= APP LOGIC ================= -->
   <script>
+    // Database: Only 4 items marked popular: true
     const database = [
       {
         id: "pizza-box",
@@ -271,11 +284,17 @@
         partnerEligible: false,
         diyTip: null,
         location: {
-          name: "The Home Depot (Call2Recycle Bins)",
-          type: "Retail Partner",
-          address: "1232 W North Ave, Chicago, IL 60642",
-          notes: "Collection bin located right inside the entrance vestibule near customer service.",
-          mapQuery: "Home+Depot+1232+W+North+Ave+Chicago+IL"
+          name: "The Home Depot (Call2Recycle Drop Box)",
+          type: "Retail Partner Drop-off",
+          address: "Citywide retail drop-off kiosks",
+          notes: "Collection box usually located right inside the entrance vestibule near customer service.",
+          searchCategory: "Home+Depot+Chicago+IL",
+          regionalBranches: {
+            south: { name: "The Home Depot - Chatham Ridge", address: "87 W 87th St, Chicago, IL 60620", query: "Home+Depot+87+W+87th+St+Chicago+IL" },
+            southwest: { name: "The Home Depot - West Elsdon", address: "4555 S Western Blvd, Chicago, IL 60609", query: "Home+Depot+4555+S+Western+Blvd+Chicago+IL" },
+            central: { name: "The Home Depot - South Loop", address: "1300 S Clinton St, Chicago, IL 60607", query: "Home+Depot+1300+S+Clinton+St+Chicago+IL" },
+            north: { name: "The Home Depot - Lincoln Park", address: "1232 W North Ave, Chicago, IL 60642", query: "Home+Depot+1232+W+North+Ave+Chicago+IL" }
+          }
         }
       },
       {
@@ -293,11 +312,17 @@
         partnerEligible: false,
         diyTip: "Save clean bags to line small bathroom wastebaskets or keep inside winter boots and purses to preserve their shape in storage.",
         location: {
-          name: "Jewel-Osco (Front Vestibule)",
-          type: "Retail Return",
-          address: "Citywide Grocery Locations (e.g. 1341 N Paulina St)",
-          notes: "Drop loose plastic bags into the designated blue recycling bin located between the sliding entrance doors.",
-          mapQuery: "Jewel+Osco+Chicago+IL"
+          name: "Jewel-Osco / Target Film Return",
+          type: "Grocery Vestibule Drop-Off",
+          address: "Available at all grocery stores citywide",
+          notes: "Place loose plastic film directly into the blue bin between the sliding entrance doors.",
+          searchCategory: "Jewel+Osco+Chicago+IL",
+          regionalBranches: {
+            south: { name: "Jewel-Osco - Chatham / Grand Crossing", address: "87 W 87th St, Chicago, IL 60620", query: "Jewel+Osco+87+W+87th+St+Chicago+IL" },
+            southwest: { name: "Jewel-Osco - Archer Heights", address: "5050 S Archer Ave, Chicago, IL 60632", query: "Jewel+Osco+5050+S+Archer+Ave+Chicago+IL" },
+            central: { name: "Jewel-Osco - South Loop", address: "1224 S Wabash Ave, Chicago, IL 60605", query: "Jewel+Osco+1224+S+Wabash+Ave+Chicago+IL" },
+            north: { name: "Jewel-Osco - Wicker Park", address: "1341 N Paulina St, Chicago, IL 60622", query: "Jewel+Osco+1341+N+Paulina+St+Chicago+IL" }
+          }
         }
       },
       {
@@ -326,7 +351,7 @@
       {
         id: "oil-based-paint",
         name: "Oil-Based Paint, Wood Stains & Thinners",
-        popular: true,
+        popular: false,
         imageUrl: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=600&q=80",
         aliases: ["paint", "oil paint", "wood stain", "deck stain", "minwax", "varnish", "paint thinner", "mineral spirits", "turpentine", "lacquer", "solvent"],
         category: "Chemicals & Paint",
@@ -341,14 +366,15 @@
           name: "Chicago HCCRF (Goose Island)",
           type: "City Hazardous Depot",
           address: "1150 N North Branch St, Chicago, IL 60642",
-          notes: "Open Tuesdays 7am–12pm, Thursdays 2pm–7pm, and 1st Saturday of each month 8am–3pm.",
-          mapQuery: "1150+N+North+Branch+St+Chicago+IL"
+          notes: "Open Tuesdays 7am–12pm, Thursdays 2pm–7pm, and 1st Saturday of each month 8am–3pm. Only city facility for oil paint.",
+          searchCategory: "1150+N+North+Branch+St+Chicago+IL",
+          regionalBranches: null
         }
       },
       {
         id: "mattress-box-spring",
         name: "Mattresses & Box Springs",
-        popular: true,
+        popular: false,
         imageUrl: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=600&q=80",
         aliases: ["mattress", "box spring", "bed", "futon", "memory foam", "casper", "purple mattress", "twin mattress", "queen mattress", "king mattress"],
         category: "Bulky & Furniture",
@@ -364,7 +390,8 @@
           type: "Hauler Service",
           address: "Direct in-home or alley pickup across Chicago",
           notes: "Upfront guaranteed pricing. Avoids city alley tickets.",
-          mapQuery: "Chicago+IL"
+          searchCategory: "Chicago+IL",
+          regionalBranches: null
         }
       },
       {
@@ -385,13 +412,19 @@
           { name: "The Urban Canopy", type: "Local Farm Compost Club", url: "https://www.theurbancanopy.org/compost-club", tagline: "South Side urban farm collecting scraps to rebuild local community soil." },
           { name: "Block Bins", type: "Shared Neighborhood Drop-Off Hubs", url: "https://www.blockbins.com/", tagline: "Affordable shared green bins secured with combination locks placed in residential alleys." }
         ],
-        diyTip: "Collect vegetable trimmings (onion skins, celery tips, carrot peels) in a freezer bag; boil for 45 mins when full to make rich homemade vegetable stock.",
+        diyTip: "Collect vegetable trimmings in a freezer bag; boil for 45 mins when full to make rich homemade vegetable stock.",
         location: {
-          name: "Chicago Community Food Scrap Drop-off",
+          name: "City of Chicago Community Compost Drop-Off",
           type: "Municipal Drop-off",
-          address: "Participating Park District Sites",
-          notes: "Free drop-off program for registered Chicago residents.",
-          mapQuery: "Chicago+Park+District+Chicago+IL"
+          address: "Over 33 free drop-off hubs across North, West, and South Side neighborhoods",
+          notes: "Free for Chicago residents. Open daily 7am-7pm. Drop into designated green lidded carts.",
+          searchCategory: "Chicago+Food+Scrap+Drop+Off",
+          regionalBranches: {
+            south: { name: "South Side Hub - Woodson Regional Library", address: "9525 S Halsted St, Chicago, IL 60628", query: "9525+S+Halsted+St+Chicago+IL" },
+            southwest: { name: "Southwest Hub - West Elsdon Park Site", address: "3720 W 55th St, Chicago, IL 60632", query: "3720+W+55th+St+Chicago+IL" },
+            central: { name: "Near South Hub - 1758 S Clark St", address: "1758 S Clark St, Chicago, IL 60616", query: "1758+S+Clark+St+Chicago+IL" },
+            north: { name: "North Side Hub - Ravenswood Site", address: "6447 N Ravenswood Ave, Chicago, IL 60626", query: "6447+N+Ravenswood+Ave+Chicago+IL" }
+          }
         }
       },
       {
@@ -413,7 +446,8 @@
           type: "City Hazardous Depot",
           address: "1150 N North Branch St, Chicago, IL 60642",
           notes: "Tuesdays 7am–12pm, Thursdays 2pm–7pm, 1st Saturday of each month 8am–3pm.",
-          mapQuery: "1150+N+North+Branch+St+Chicago+IL"
+          searchCategory: "1150+N+North+Branch+St+Chicago+IL",
+          regionalBranches: null
         }
       },
       {
@@ -433,57 +467,31 @@
         location: null
       },
       {
-        id: "rigid-plastics-1-5",
-        name: "Rigid Plastics #1, #2, #4, #5",
+        id: "motor-oil",
+        name: "Used Motor Oil & Fluids",
         popular: false,
-        imageUrl: "https://images.unsplash.com/photo-1530587191325-3db32d826c18?auto=format&fit=crop&w=600&q=80",
-        aliases: ["plastic", "plastic bottle", "water bottle", "milk jug", "detergent bottle", "shampoo bottle", "yogurt tub", "sour cream tub", "takeout container"],
-        category: "Plastics",
-        disposalAction: "blue_cart",
-        badge: "Blue Cart Safe",
-        blueCartAllowed: true,
-        summary: "Fully accepted in Chicago curbside Blue Carts if empty, rinsed, and completely dry.",
-        instructions: "Rinse food or soap residue. Screw plastic caps back onto bottles so they don't fall through sorting screens.",
-        partnerEligible: false,
-        diyTip: "Cut the bottom off gallon milk jugs to create instant garden cloches that protect tender herbs and vegetable seedlings from spring frost.",
-        location: null
-      },
-      {
-        id: "alkaline-batteries",
-        name: "Single-Use Alkaline Batteries (AA, AAA, 9V)",
-        popular: false,
-        imageUrl: "https://images.unsplash.com/photo-1619725002198-6a689b72f41d?auto=format&fit=crop&w=600&q=80",
-        aliases: ["battery", "batteries", "aa", "aaa", "9v", "duracell", "energizer", "kirkland batteries", "remote battery", "flashlight battery", "alkaline"],
-        category: "Household Items",
-        disposalAction: "trash",
-        badge: "Black Cart / Trash",
-        blueCartAllowed: false,
-        summary: "Standard single-use alkaline batteries contain no mercury and are classified as non-hazardous waste in Illinois.",
-        instructions: "Toss into your regular black trash cart. Drop-off depots do not collect standard alkaline batteries.",
-        partnerEligible: false,
-        diyTip: null,
-        location: null
-      },
-      {
-        id: "cfl-fluorescent-bulbs",
-        name: "CFL & Fluorescent Tube Light Bulbs",
-        popular: false,
-        imageUrl: "https://images.unsplash.com/photo-1534143046043-4e20b33fbdf1?auto=format&fit=crop&w=600&q=80",
-        aliases: ["light bulb", "cfl", "spiral bulb", "fluorescent", "fluorescent tube", "tube light", "t8 tube", "mercury bulb"],
-        category: "Hazardous & Lighting",
+        imageUrl: "https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=600&q=80",
+        aliases: ["oil", "motor oil", "engine oil", "car oil", "transmission fluid", "brake fluid"],
+        category: "Hazardous & Automotive",
         disposalAction: "special_facility",
-        badge: "Goose Island / Hardware",
+        badge: "Auto Store / Goose Island",
         blueCartAllowed: false,
-        summary: "CFLs and fluorescent tubes contain toxic mercury vapor that releases into alley air when crushed by compactor trucks.",
-        instructions: "Incandescent and LED bulbs can go in regular trash; fluorescent tubes and CFLs must be dropped off.",
+        summary: "Illegal to dump down alley drains or sewers. Automotive parts retailers accept used motor oil for free drop-off.",
+        instructions: "Store in a clean container with a tight cap. Bring up to 5 gallons to your nearest auto parts store.",
         partnerEligible: false,
         diyTip: null,
         location: {
-          name: "Chicago HCCRF (Goose Island)",
-          type: "City Hazardous Depot",
-          address: "1150 N North Branch St, Chicago, IL 60642",
-          notes: "Tuesdays 7am–12pm, Thursdays 2pm–7pm, 1st Saturday 8am–3pm.",
-          mapQuery: "1150+N+North+Branch+St+Chicago+IL"
+          name: "AutoZone / Advance Auto Parts",
+          type: "Automotive Drop-Off",
+          address: "Citywide retail stores across all neighborhoods",
+          notes: "Free used motor oil collection up to 5 gallons per customer.",
+          searchCategory: "AutoZone+Chicago+IL",
+          regionalBranches: {
+            south: { name: "AutoZone - Roseland / Chatham", address: "10320 S Michigan Ave, Chicago, IL 60628", query: "AutoZone+10320+S+Michigan+Ave+Chicago+IL" },
+            southwest: { name: "AutoZone - Gage Park", address: "5500 S Kedzie Ave, Chicago, IL 60629", query: "AutoZone+5500+S+Kedzie+Ave+Chicago+IL" },
+            central: { name: "AutoZone - Pilsen / Near West", address: "1701 S Ashland Ave, Chicago, IL 60608", query: "AutoZone+1701+S+Ashland+Ave+Chicago+IL" },
+            north: { name: "AutoZone - Lincoln Park", address: "1005 W Webster Ave, Chicago, IL 60614", query: "AutoZone+1005+W+Webster+Ave+Chicago+IL" }
+          }
         }
       }
     ];
@@ -505,8 +513,15 @@
     const collapseResultsBtn = document.getElementById('collapseResultsBtn');
     const backBtn = document.getElementById('backBtn');
 
+    // ZIP Code Elements
+    const zipToolContainer = document.getElementById('zipToolContainer');
+    const zipInput = document.getElementById('zipInput');
+    const findZipBtn = document.getElementById('findZipBtn');
+    const zipFeedback = document.getElementById('zipFeedback');
+
     let currentFilter = 'all';
     let isBrowsingAll = false;
+    let currentActiveItem = null;
 
     function getBadgeClasses(action) {
       switch (action) {
@@ -554,7 +569,7 @@
       return card;
     }
 
-    // Render the initial Popular Grid on Home
+    // Render the initial 4 Popular Items on Home
     function renderPopularGrid() {
       popularGrid.innerHTML = '';
       const popularItems = database.filter(i => i.popular);
@@ -566,21 +581,18 @@
     function updateFeed() {
       const query = searchInput.value.toLowerCase().trim();
 
-      // Show/Hide Clear Button
       if (query.length > 0) {
         clearSearchBtn.classList.remove('hidden');
       } else {
         clearSearchBtn.classList.add('hidden');
       }
 
-      // If no search query, filter is 'all', and user hasn't clicked "Browse All", show Popular view
       if (!query && currentFilter === 'all' && !isBrowsingAll) {
         popularSection.classList.remove('hidden');
         resultsSection.classList.add('hidden');
         return;
       }
 
-      // Otherwise, show active results feed
       popularSection.classList.add('hidden');
       resultsSection.classList.remove('hidden');
 
@@ -613,27 +625,63 @@
       filtered.forEach(item => itemsGrid.appendChild(createCard(item)));
     }
 
-    // Route Handler: Detail Page vs Search View
-    function handleRouting() {
-      const hash = window.location.hash.replace('#', '').trim();
+    // Regional ZIP code mapping for Chicago
+    function resolveChicagoRegion(zip) {
+      const z = parseInt(zip, 10);
+      if (isNaN(z)) return null;
 
-      if (hash) {
-        const item = database.find(i => i.id === hash);
-        if (item) {
-          showDetail(item);
-          return;
-        }
+      // Far South & South Side
+      if ([60617, 60619, 60620, 60621, 60628, 60633, 60637, 60643, 60649, 60653, 60655].includes(z)) {
+        return 'south';
       }
-      showSearch();
+      // Southwest Side
+      if ([60609, 60629, 60632, 60638, 60652].includes(z)) {
+        return 'southwest';
+      }
+      // Central / Near West / Loop
+      if ([60601, 60602, 60603, 60604, 60605, 60606, 60607, 60608, 60611, 60616, 60624, 60644, 60661].includes(z)) {
+        return 'central';
+      }
+      // North & Northwest Side
+      return 'north';
     }
 
-    function showSearch() {
-      detailView.classList.add('hidden');
-      searchView.classList.remove('hidden');
-      window.scrollTo(0, 0);
+    function updateLocationByZip() {
+      if (!currentActiveItem || !currentActiveItem.location) return;
+
+      const zip = zipInput.value.trim();
+      const loc = currentActiveItem.location;
+
+      if (!zip || zip.length < 5) {
+        zipFeedback.textContent = "Please enter a valid 5-digit Chicago ZIP.";
+        return;
+      }
+
+      // If item has decentralized retail/branch dropoffs
+      if (loc.regionalBranches) {
+        const region = resolveChicagoRegion(zip);
+        const branch = loc.regionalBranches[region] || loc.regionalBranches['central'];
+
+        document.getElementById('detailLocName').textContent = branch.name;
+        document.getElementById('detailLocAddress').textContent = branch.address;
+
+        const embedUrl = `https://maps.google.com/maps?q=${branch.query}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
+        document.getElementById('detailMapIframe').src = embedUrl;
+        document.getElementById('detailDirectionsLink').href = `https://www.google.com/maps/search/?api=1&query=${branch.query}`;
+
+        zipFeedback.textContent = `Showing nearest site for ZIP ${zip} (${region.toUpperCase()} region).`;
+      } else {
+        // Goose Island single central depot
+        const embedUrl = `https://maps.google.com/maps?q=${loc.searchCategory}+near+${zip}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+        document.getElementById('detailMapIframe').src = embedUrl;
+        document.getElementById('detailDirectionsLink').href = `https://www.google.com/maps/search/?api=1&query=${loc.searchCategory}+near+${zip}`;
+        zipFeedback.textContent = `Showing routes from ZIP ${zip} to the designated facility.`;
+      }
     }
 
+    // Detail View Handler
     function showDetail(item) {
+      currentActiveItem = item;
       searchView.classList.add('hidden');
       detailView.classList.remove('hidden');
       window.scrollTo(0, 0);
@@ -660,12 +708,6 @@
       badgeEl.textContent = item.badge;
       badgeEl.className = `text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${getBadgeClasses(item.disposalAction)}`;
 
-      // Aliases / Synonyms
-      const examplesContainer = document.getElementById('detailExamples');
-      examplesContainer.innerHTML = item.aliases.map(alias => 
-        `<span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-medium border border-slate-200">${alias}</span>`
-      ).join('');
-
       // DIY Card
       const diyCard = document.getElementById('detailDiyCard');
       const diyTipEl = document.getElementById('detailDiyTip');
@@ -682,7 +724,7 @@
       const reuseIntro = document.getElementById('detailReuseIntro');
       if (item.reusePartners && item.reusePartners.length > 0) {
         reuseCard.classList.remove('hidden');
-        reuseIntro.textContent = item.reuseIntro || "Bring clean containers to these Chicago bulk refill destinations:";
+        reuseIntro.textContent = item.reuseIntro;
         reuseList.innerHTML = item.reusePartners.map(store => `
           <div class="p-3.5 rounded-xl bg-slate-900/90 border border-teal-800/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-teal-500 transition-colors">
             <div class="space-y-0.5">
@@ -725,7 +767,7 @@
         compostCard.classList.add('hidden');
       }
 
-      // Location & Maps Embed
+      // Location & Maps Embed Setup
       const locCard = document.getElementById('detailLocationCard');
       if (item.location) {
         locCard.classList.remove('hidden');
@@ -734,9 +776,16 @@
         document.getElementById('detailLocAddress').textContent = item.location.address;
         document.getElementById('detailLocNotes').textContent = item.location.notes;
 
-        const embedUrl = `https://maps.google.com/maps?q=${item.location.mapQuery}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
+        // Reset ZIP input
+        zipInput.value = '';
+        zipFeedback.textContent = item.location.regionalBranches 
+          ? 'Enter your Chicago ZIP to see the closest retail or community location.' 
+          : 'Central municipal depot serving all wards.';
+
+        // Initial default embed
+        const embedUrl = `https://maps.google.com/maps?q=${item.location.searchCategory}&t=&z=12&ie=UTF8&iwloc=&output=embed`;
         document.getElementById('detailMapIframe').src = embedUrl;
-        document.getElementById('detailDirectionsLink').href = `https://www.google.com/maps/search/?api=1&query=${item.location.mapQuery}`;
+        document.getElementById('detailDirectionsLink').href = `https://www.google.com/maps/search/?api=1&query=${item.location.searchCategory}`;
       } else {
         locCard.classList.add('hidden');
       }
@@ -750,7 +799,25 @@
       }
     }
 
-    // Event Listeners
+    function showSearch() {
+      detailView.classList.add('hidden');
+      searchView.classList.remove('hidden');
+      window.scrollTo(0, 0);
+    }
+
+    function handleRouting() {
+      const hash = window.location.hash.replace('#', '').trim();
+      if (hash) {
+        const item = database.find(i => i.id === hash);
+        if (item) {
+          showDetail(item);
+          return;
+        }
+      }
+      showSearch();
+    }
+
+    // Listeners
     searchInput.addEventListener('input', () => {
       isBrowsingAll = false;
       updateFeed();
@@ -793,6 +860,11 @@
         isBrowsingAll = (currentFilter !== 'all');
         updateFeed();
       });
+    });
+
+    findZipBtn.addEventListener('click', updateLocationByZip);
+    zipInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') updateLocationByZip();
     });
 
     backBtn.addEventListener('click', () => {
